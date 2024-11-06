@@ -1,0 +1,27 @@
+<!-- BirthdayReminderMod.csproj -->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net45</TargetFramework>
+    <AssemblyName>BirthdayReminderMod</AssemblyName>
+    <RootNamespace>BirthdayReminderMod</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Reference the SMAPI modding API and Stardew Valley game files -->
+    <Reference Include="StardewModdingAPI">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\StardewModdingAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="StardewValley">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Stardew Valley.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="xTile">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\xTile.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Remove the explicit Compile Include statements -->
+  <!-- The SDK will automatically include all .cs files in the project directory -->
+</Project>
