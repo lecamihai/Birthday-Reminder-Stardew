@@ -1,0 +1,12 @@
+{
+  "Name": "Birthday Reminder Mod",
+  "Author": "L3ca",
+  "Version": "1.0.0",
+  "Description": "Reminds you of villagers' birthdays.",
+  "UniqueID": "L3ca.BirthdayReminderMod",
+  "EntryDll": "BirthdayReminderMod.dll",
+  "MinimumApiVersion": "3.0.0",
+  "UpdateKeys": [
+    "CurseForge:1108150"
+  ]
+}
