@@ -107,11 +107,6 @@
             A <see cref="T:Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> for which the audio buffer is provided by the game at run time.
             </summary>
         </member>
-        <member name="P:Microsoft.Xna.Framework.Audio.DynamicSoundEffectInstance.LoopCount">
-            <summary>
-            This value has no effect on DynamicSoundEffectInstance, but can be used by the sound effect's data provider to handle looping.
-            </summary>
-        </member>
         <member name="P:Microsoft.Xna.Framework.Audio.DynamicSoundEffectInstance.PendingBufferCount">
             <summary>
             Returns the number of audio buffers queued for playback.
@@ -609,6 +604,23 @@
             no managed objects should be touched because we do not know if they are still valid or
             not at that time.  Unmanaged resources should always be released.</remarks>
         </member>
+        <member name="M:Microsoft.Xna.Framework.Audio.SoundEffectInstance.PlatformInitialize(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Creates a standalone SoundEffectInstance from given wavedata.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Audio.SoundEffectInstance.InitializeSound">
+            <summary>
+            Gets the OpenAL sound controller, constructs the sound buffer, and sets up the event delegates for
+            the reserved and recycled events.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Audio.SoundEffectInstance.XnaPitchToAlPitch(System.Single)">
+            <summary>
+            Converts the XNA [-1, 1] pitch range to OpenAL pitch (0, INF) or Android SoundPool playback rate [0.5, 2].
+            <param name="xnaPitch">The pitch of the sound in the Microsoft XNA range.</param>
+            </summary>
+        </member>
         <member name="P:Microsoft.Xna.Framework.Audio.SoundEffectInstancePool.SoundsAvailable">
             <summary>
             Gets a value indicating whether the platform has capacity for more sounds to be played at this time.
@@ -945,6 +957,58 @@
             <summary>
             Support for playing sound effects and XACT audio.
             </summary>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Audio.AudioLoader.Load(System.IO.Stream,MonoGame.OpenAL.ALFormat@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@)">
+            <summary>
+            Load a WAV file from stream.
+            </summary>
+            <param name="stream">The stream positioned at the start of the WAV file.</param>
+            <param name="format">Gets the OpenAL format enumeration value.</param>
+            <param name="frequency">Gets the frequency or sample rate.</param>
+            <param name="channels">Gets the number of channels.</param>
+            <param name="blockAlignment">Gets the block alignment, important for compressed sounds.</param>
+            <param name="bitsPerSample">Gets the number of bits per sample.</param>
+            <param name="samplesPerBlock">Gets the number of samples per block.</param>
+            <param name="sampleCount">Gets the total number of samples.</param>
+            <returns>The byte buffer containing the waveform data or compressed blocks.</returns>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Audio.OpenALSoundController.#ctor">
+            <summary>
+            Sets up the hardware resources used by the controller.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Audio.OpenALSoundController.OpenSoundController">
+            <summary>
+            Open the sound device, sets up an audio context, and makes the new context
+            the current context. Note that this method will stop the playback of
+            music that was running prior to the game start. If any error occurs, then
+            the state of the controller is reset.
+            </summary>
+            <returns>True if the sound controller was setup, and false if not.</returns>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Audio.OpenALSoundController.CleanUpOpenAL">
+            <summary>
+            Destroys the AL context and closes the device, when they exist.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Audio.OpenALSoundController.Dispose">
+            <summary>
+            Dispose of the OpenALSoundCOntroller.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Audio.OpenALSoundController.Dispose(System.Boolean)">
+            <summary>
+            Dispose of the OpenALSoundCOntroller.
+            </summary>
+            <param name="disposing">If true, the managed resources are to be disposed.</param>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Audio.OpenALSoundController.ReserveSource">
+            <summary>
+            Reserves a sound buffer and return its identifier. If there are no available sources
+            or the controller was not able to setup the hardware then an
+            <see cref="T:Microsoft.Xna.Framework.Audio.InstancePlayLimitException"/> is thrown.
+            </summary>
+            <returns>The source number of the reserved sound buffer.</returns>
         </member>
         <member name="T:Microsoft.Xna.Framework.BoundingBox">
             <summary>
@@ -2821,30 +2885,45 @@
             The version passed to the type at runtime.
             </summary>
         </member>
+        <member name="T:Microsoft.Xna.Framework.Content.ContentTypeReaderManager">
+            <summary>
+            Defines a manager that constructs and keeps track of <see cref="T:Microsoft.Xna.Framework.Content.ContentTypeReader"/> objects.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Content.ContentTypeReaderManager.GetTypeReader(System.Type)">
+            <summary>
+            Creates a new instance of the <see cref="T:Microsoft.Xna.Framework.Content.ContentReader"/> class initialized for the specified type.
+            </summary>
+            <param name="targetType">The type the <see cref="T:Microsoft.Xna.Framework.Content.ContentReader"/> will handle.</param>
+            <returns>
+            The <see cref="T:Microsoft.Xna.Framework.Content.ContentReader"/> created by this method if a content reader of the specified type has been
+            registered with this content manager; otherwise, null.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">If the <paramref name="targetType"/> parameter is null.</exception>
+        </member>
         <member name="M:Microsoft.Xna.Framework.Content.ContentTypeReaderManager.PrepareType(System.String)">
             <summary>
-            Removes Version, Culture and PublicKeyToken from a type string.
+            Removes the Version, Culture, and PublicKeyToken from a fully-qualified type name string.
             </summary>
             <remarks>
             Supports multiple generic types (e.g. Dictionary&lt;TKey,TValue&gt;) and nested generic types (e.g. List&lt;List&lt;int&gt;&gt;).
-            </remarks> 
-            <param name="type">
-            A <see cref="T:System.String"/>
-            </param>
-            <returns>
-            A <see cref="T:System.String"/>
-            </returns>
+            </remarks>
+            <param name="type">A string containing the fully-qualified type name to prepare.</param>
+            <returns>A new string with the Version, Culture and PublicKeyToken removed.</returns>
         </member>
         <member name="M:Microsoft.Xna.Framework.Content.ContentTypeReaderManager.AddTypeCreator(System.String,System.Func{Microsoft.Xna.Framework.Content.ContentTypeReader})">
             <summary>
-            Adds the type creator.
+            Registers a function to create a <see cref="T:Microsoft.Xna.Framework.Content.ContentTypeReader"/> instance used to read an object of the
+            type specified.
             </summary>
-            <param name='typeString'>
-            Type string.
-            </param>
-            <param name='createFunction'>
-            Create function.
-            </param>
+            <param name='typeString'>A string containing the fully-qualified type name of the object type.</param>
+            <param name='createFunction'>The function responsible for creating an instance of the <see cref="T:Microsoft.Xna.Framework.Content.ContentTypeReader"/> class.</param>
+            <exception cref="T:System.ArgumentNullException">If the <paramref name="typeString"/> parameter is null or an empty string.</exception>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Content.ContentTypeReaderManager.ClearTypeCreators">
+            <summary>
+            Clears all content type creators that were registered with <see cref="M:Microsoft.Xna.Framework.Content.ContentTypeReaderManager.AddTypeCreator(System.String,System.Func{Microsoft.Xna.Framework.Content.ContentTypeReader})"/>
+            </summary>
         </member>
         <member name="T:Microsoft.Xna.Framework.Content.NamespaceDoc">
             <summary>
@@ -8072,12 +8151,28 @@
         </member>
         <member name="P:Microsoft.Xna.Framework.Graphics.Texture2D.Width">
             <summary>
-            Gets the width of the texture in pixels.
+            Gets the width of the texture image data in pixels.
             </summary>
         </member>
         <member name="P:Microsoft.Xna.Framework.Graphics.Texture2D.Height">
             <summary>
-            Gets the height of the texture in pixels.
+            Gets the height of the texture image data in pixels.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xna.Framework.Graphics.Texture2D.ActualWidth">
+            <summary>
+            Gets the width of the allocated texture data in pixels.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xna.Framework.Graphics.Texture2D.ActualHeight">
+            <summary>
+            Gets the height of the allocated texture data in pixels.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Graphics.Texture2D.SetImageSize(System.Int32,System.Int32)">
+            <summary>
+            Gets the image data size of the texture which could
+            be smaller than the allocated texture data size.
             </summary>
         </member>
         <member name="M:Microsoft.Xna.Framework.Graphics.Texture2D.SetData``1(System.Int32,System.Int32,System.Nullable{Microsoft.Xna.Framework.Rectangle},``0[],System.Int32,System.Int32)">
@@ -9527,6 +9622,11 @@
         <member name="P:Microsoft.Xna.Framework.Input.GamePad.MaximumGamePadCount">
             <summary>
             The maximum number of game pads supported on this system.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Input.GamePad.InitDatabase">
+            <summary>
+            Initialies the internal database of gamepad mappings for an SDL context
             </summary>
         </member>
         <member name="T:Microsoft.Xna.Framework.Input.GamePadButtons">
@@ -17126,6 +17226,13 @@
             </summary>
             <param name="key">The key involved in this event</param>
         </member>
+        <member name="T:Microsoft.Xna.Framework.Threading.StateActionHelper`1">
+            <summary>
+            Static helper that provides a generic action queue
+            but a non-generic dequeue-and-invoke <see cref="T:System.Action"/>.
+            </summary>
+            <typeparam name="TState"></typeparam>
+        </member>
         <member name="M:Microsoft.Xna.Framework.Threading.IsOnUIThread">
             <summary>
             Checks if the code is currently running on the UI thread.
@@ -17145,9 +17252,17 @@
             </summary>
             <param name="action">The action to be run on the UI thread</param>
         </member>
+        <member name="M:Microsoft.Xna.Framework.Threading.BlockOnUIThread``1(System.Action{``0},``0)">
+            <summary>
+            Runs the given action on the UI thread and blocks the current thread while the action is running.
+            If the current thread is the UI thread, the action will run immediately.
+            </summary>
+            <param name="action">The action to be run on the UI thread</param>
+            <param name="state">The data to pass to <paramref name="action"/></param>.
+        </member>
         <member name="M:Microsoft.Xna.Framework.Threading.Run">
             <summary>
-            Runs all pending actions.  Must be called from the UI thread.
+            Runs all pending actions. Must be called from the UI thread.
             </summary>
         </member>
         <member name="M:MonoGame.Framework.Utilities.ByteBufferPool.Get(System.Int32)">

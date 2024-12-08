@@ -1,3 +1,5 @@
 is_global = true
 build_property.RootNamespace = BirthdayReminderMod
-build_property.ProjectDir = C:\Users\Mihai\Desktop\stardewvalley\BirthdayReminderMod\
+build_property.ProjectDir = C:\Users\Mihai\Birthday-Reminder-Stardew\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

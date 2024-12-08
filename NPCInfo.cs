@@ -1,9 +1,7 @@
-// NPCInfo.cs
 using System.Collections.Generic;
 
 namespace BirthdayReminderMod
 {
-    // Class to store NPC information
     public class NPCInfo
     {
         public string Name { get; }

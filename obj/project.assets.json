@@ -2,13 +2,13 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.5": {
-      "Microsoft.NETFramework.ReferenceAssemblies/1.0.0": {
+      "Microsoft.NETFramework.ReferenceAssemblies/1.0.3": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETFramework.ReferenceAssemblies.net45": "1.0.0"
+          "Microsoft.NETFramework.ReferenceAssemblies.net45": "1.0.3"
         }
       },
-      "Microsoft.NETFramework.ReferenceAssemblies.net45/1.0.0": {
+      "Microsoft.NETFramework.ReferenceAssemblies.net45/1.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NETFramework.ReferenceAssemblies.net45.targets": {}
@@ -17,21 +17,21 @@
     }
   },
   "libraries": {
-    "Microsoft.NETFramework.ReferenceAssemblies/1.0.0": {
-      "sha512": "7D2TMufjGiowmt0E941kVoTIS+GTNzaPopuzM1/1LSaJAdJdBrVP0SkZW7AgDd0a2U1DjsIeaKG1wxGVBNLDMw==",
+    "Microsoft.NETFramework.ReferenceAssemblies/1.0.3": {
+      "sha512": "vUc9Npcs14QsyOD01tnv/m8sQUnGTGOw1BCmKcv77LBJY7OxhJ+zJF7UD/sCL3lYNFuqmQEVlkfS4Quif6FyYg==",
       "type": "package",
-      "path": "microsoft.netframework.referenceassemblies/1.0.0",
+      "path": "microsoft.netframework.referenceassemblies/1.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
+        "microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
         "microsoft.netframework.referenceassemblies.nuspec"
       ]
     },
-    "Microsoft.NETFramework.ReferenceAssemblies.net45/1.0.0": {
-      "sha512": "f7XMQsZFaoc3w8Vg3VQ3FHuU2C9vf0Ng5EAV4gzdNWDerPM/OmrzccLj15eI1wCLLXj4jk8+lKsbonzJeyXgQQ==",
+    "Microsoft.NETFramework.ReferenceAssemblies.net45/1.0.3": {
+      "sha512": "dcSLNuUX2rfZejsyta2EWZ1W5U6ucbFt697lRg1qiTlTM5ZlYv4uAvuxE6ROy6xLWWhLhOaReCDxkhxcajRYtQ==",
       "type": "package",
-      "path": "microsoft.netframework.referenceassemblies.net45/1.0.0",
+      "path": "microsoft.netframework.referenceassemblies.net45/1.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -342,14 +342,14 @@
         "build/.NETFramework/v4.5/sysglobl.dll",
         "build/.NETFramework/v4.5/sysglobl.xml",
         "build/Microsoft.NETFramework.ReferenceAssemblies.net45.targets",
-        "microsoft.netframework.referenceassemblies.net45.1.0.0.nupkg.sha512",
+        "microsoft.netframework.referenceassemblies.net45.1.0.3.nupkg.sha512",
         "microsoft.netframework.referenceassemblies.net45.nuspec"
       ]
     }
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.5": [
-      "Microsoft.NETFramework.ReferenceAssemblies >= 1.0.0"
+      "Microsoft.NETFramework.ReferenceAssemblies >= 1.0.3"
     ]
   },
   "packageFolders": {
@@ -358,11 +358,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Mihai\\Desktop\\stardewvalley\\BirthdayReminderMod\\BirthdayReminderMod.csproj",
+      "projectUniqueName": "C:\\Users\\Mihai\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
       "projectName": "BirthdayReminderMod",
-      "projectPath": "C:\\Users\\Mihai\\Desktop\\stardewvalley\\BirthdayReminderMod\\BirthdayReminderMod.csproj",
+      "projectPath": "C:\\Users\\Mihai\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
       "packagesPath": "C:\\Users\\Mihai\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Mihai\\Desktop\\stardewvalley\\BirthdayReminderMod\\obj\\",
+      "outputPath": "C:\\Users\\Mihai\\Birthday-Reminder-Stardew\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Mihai\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -383,6 +383,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -392,11 +397,11 @@
           "Microsoft.NETFramework.ReferenceAssemblies": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[1.0.0, )",
+            "version": "[1.0.3, )",
             "autoReferenced": true
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.408\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403\\RuntimeIdentifierGraph.json"
       }
     }
   }

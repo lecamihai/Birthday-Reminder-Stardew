@@ -1,52 +1,39 @@
-﻿// ModEntry.cs
-using StardewModdingAPI;
+﻿using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using System;
-using System.Collections.Generic;
 
 namespace BirthdayReminderMod
 {
     public class ModEntry : Mod
     {
-        // Store NPC data
-        private Dictionary<string, NPCInfo> npcData;
+        private NPCDataProvider npcDataProvider;
 
         public override void Entry(IModHelper helper)
         {
-            // Initialize NPC data using the data provider
-            npcData = NPCDataProvider.GetNPCData();
-
-            // Subscribe to the DayStarted event
+            npcDataProvider = new NPCDataProvider();
             helper.Events.GameLoop.DayStarted += OnDayStarted;
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
-            // Get the current season and day
             string season = Game1.currentSeason;
             int day = Game1.dayOfMonth;
             string dateKey = $"{season} {day}";
 
-            // Check if today is any NPC's birthday
-            foreach (var npc in npcData.Values)
+            foreach (var npcInfo in npcDataProvider.GetNPCData().Values)
             {
-                if (npc.Birthday.Equals(dateKey, StringComparison.OrdinalIgnoreCase))
+                if (npcInfo.Birthday.Equals(dateKey, StringComparison.OrdinalIgnoreCase))
                 {
-                    // Display birthday message without listing gifts
-                    string message = $"It's {npc.Name}'s birthday!\nThey love:";
-
-                    // Find the NPC instance in the game
-                    NPC gameNPC = Game1.getCharacterFromName(npc.Name);
-
+                    NPC gameNPC = Game1.getCharacterFromName(npcInfo.Name);
                     if (gameNPC != null)
                     {
-                        // Show the custom message box with the NPC instance
-                        Game1.activeClickableMenu = new CustomMessageBox(message, npc.LovedGifts, this.Monitor, gameNPC);
+                        string message = $"It's {npcInfo.Name}'s birthday!\nThey love:";
+                        Game1.activeClickableMenu = new CustomMessageBox(message, npcInfo.LovedGifts, this.Monitor, gameNPC);
                     }
                     else
                     {
-                        Monitor.Log($"NPC '{npc.Name}' not found in the game.", LogLevel.Warn);
+                        Monitor.Log($"NPC '{npcInfo.Name}' not found in the game.", LogLevel.Warn);
                     }
                 }
             }

@@ -38,6 +38,9 @@
         <member name="P:StardewModdingAPI.Constants.MinimumGameVersion">
             <summary>The minimum supported version of Stardew Valley.</summary>
         </member>
+        <member name="P:StardewModdingAPI.Constants.MinimumGameBuild">
+            <summary>The minimum supported Stardew Valley build number, or <c>null</c> for any build of <see cref="P:StardewModdingAPI.Constants.MinimumGameVersion"/>.</summary>
+        </member>
         <member name="P:StardewModdingAPI.Constants.MaximumGameVersion">
             <summary>The maximum supported version of Stardew Valley, if any.</summary>
         </member>
@@ -644,6 +647,8 @@
         </member>
         <member name="E:StardewModdingAPI.Events.IContentEvents.AssetRequested">
              <summary>Raised when an asset is being requested from the content pipeline.</summary>
+             <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+             <param name="e">The event data.</param>
              <remarks>
              The asset isn't necessarily being loaded yet (e.g. the game may be checking if it exists). Mods can register the changes they want to apply using methods on the event arguments. These will be applied when the asset is actually loaded.
             
@@ -652,13 +657,19 @@
         </member>
         <member name="E:StardewModdingAPI.Events.IContentEvents.AssetsInvalidated">
             <summary>Raised after one or more assets were invalidated from the content cache by a mod, so they'll be reloaded next time they're requested. If the assets will be reloaded or propagated automatically, this event is raised before that happens.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IContentEvents.AssetReady">
             <summary>Raised after an asset is loaded by the content pipeline, after all mod edits specified via <see cref="E:StardewModdingAPI.Events.IContentEvents.AssetRequested"/> have been applied.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
             <remarks>This event is only raised if something requested the asset from the content pipeline. Invalidating an asset from the content cache won't necessarily reload it automatically.</remarks>
         </member>
         <member name="E:StardewModdingAPI.Events.IContentEvents.LocaleChanged">
             <summary>Raised after the game language changes.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
             <remarks>For non-English players, this may be raised during startup when the game switches to the previously selected language.</remarks>
         </member>
         <member name="T:StardewModdingAPI.Events.IDisplayEvents">
@@ -666,102 +677,164 @@
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.MenuChanged">
             <summary>Raised after a game menu is opened, closed, or replaced.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.RenderingStep">
             <summary>Raised before the game draws a specific step in the rendering cycle.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.RenderedStep">
             <summary>Raised after the game draws a specific step in the rendering cycle.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.Rendering">
             <summary>Raised before the game draws anything to the screen in a draw tick, as soon as the sprite batch is opened. The sprite batch may be closed and reopened multiple times after this event is called, but it's only raised once per draw tick. This event isn't useful for drawing to the screen, since the game will draw over it.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.Rendered">
-            <summary>Raised after the game draws to the sprite patch in a draw tick, just before the final sprite batch is rendered to the screen. Since the game may open/close the sprite batch multiple times in a draw tick, the sprite batch may not contain everything being drawn and some things may already be rendered to the screen. Content drawn to the sprite batch at this point will be drawn over all vanilla content (including menus, HUD, and cursor).</summary>
+            <summary>Raised after the game draws to the sprite batch in a draw tick, just before the final sprite batch is rendered to the screen. Since the game may open/close the sprite batch multiple times in a draw tick, the sprite batch may not contain everything being drawn and some things may already be rendered to the screen. Content drawn to the sprite batch at this point will be drawn over all vanilla content (including menus, HUD, and cursor).</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.RenderingWorld">
             <summary>Raised before the game world is drawn to the screen. This event isn't useful for drawing to the screen, since the game will draw over it.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.RenderedWorld">
-            <summary>Raised after the game world is drawn to the sprite patch, before it's rendered to the screen. Content drawn to the sprite batch at this point will be drawn over the world, but under any active menu, HUD elements, or cursor.</summary>
+            <summary>Raised after the game world is drawn to the sprite batch, before it's rendered to the screen. Content drawn to the sprite batch at this point will be drawn over the world, but under any active menu, HUD elements, or cursor.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.RenderingActiveMenu">
             <summary>When a menu is open (<see cref="P:StardewValley.Game1.activeClickableMenu"/> isn't null), raised before that menu is drawn to the screen. This includes the game's internal menus like the title screen. Content drawn to the sprite batch at this point will appear under the menu.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.RenderedActiveMenu">
             <summary>When a menu is open (<see cref="P:StardewValley.Game1.activeClickableMenu"/> isn't null), raised after that menu is drawn to the sprite batch but before it's rendered to the screen. Content drawn to the sprite batch at this point will appear over the menu and menu cursor.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.RenderingHud">
             <summary>Raised before drawing the HUD (item toolbar, clock, etc) to the screen. The vanilla HUD may be hidden at this point (e.g. because a menu is open). Content drawn to the sprite batch at this point will appear under the HUD.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.RenderedHud">
             <summary>Raised after drawing the HUD (item toolbar, clock, etc) to the sprite batch, but before it's rendered to the screen. The vanilla HUD may be hidden at this point (e.g. because a menu is open). Content drawn to the sprite batch at this point will appear over the HUD.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IDisplayEvents.WindowResized">
             <summary>Raised after the game window is resized.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="T:StardewModdingAPI.Events.IGameLoopEvents">
             <summary>Events linked to the game's update loop. The update loop runs roughly ≈60 times/second to run game logic like state changes, action handling, etc. These can be useful, but you should consider more semantic events like <see cref="T:StardewModdingAPI.Events.IInputEvents"/> if possible.</summary>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.GameLaunched">
             <summary>Raised after the game is launched, right before the first update tick. This happens once per game session (unrelated to loading saves). All mods are loaded and initialized at this point, so this is a good time to set up mod integrations.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.UpdateTicking">
             <summary>Raised before the game state is updated (≈60 times per second).</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.UpdateTicked">
             <summary>Raised after the game state is updated (≈60 times per second).</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.OneSecondUpdateTicking">
             <summary>Raised once per second before the game state is updated.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.OneSecondUpdateTicked">
             <summary>Raised once per second after the game state is updated.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.SaveCreating">
             <summary>Raised before the game creates a new save file.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.SaveCreated">
             <summary>Raised after the game finishes creating the save file.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.Saving">
             <summary>Raised before the game begins writing data to the save file (except the initial save creation).</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.Saved">
             <summary>Raised after the game finishes writing data to the save file (except the initial save creation).</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.SaveLoaded">
             <summary>Raised after the player loads a save slot and the world is initialized.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.DayStarted">
             <summary>Raised after the game begins a new day (including when the player loads a save).</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.DayEnding">
             <summary>Raised before the game ends the current day. This happens before it starts setting up the next day and before <see cref="E:StardewModdingAPI.Events.IGameLoopEvents.Saving"/>.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.TimeChanged">
             <summary>Raised after the in-game clock time changes.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IGameLoopEvents.ReturnedToTitle">
             <summary>Raised after the game returns to the title screen.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="T:StardewModdingAPI.Events.IInputEvents">
             <summary>Events raised when the player provides input using a controller, keyboard, or mouse.</summary>
         </member>
         <member name="E:StardewModdingAPI.Events.IInputEvents.ButtonsChanged">
             <summary>Raised after the player presses or releases any buttons on the keyboard, controller, or mouse.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IInputEvents.ButtonPressed">
             <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IInputEvents.ButtonReleased">
             <summary>Raised after the player releases a button on the keyboard, controller, or mouse.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IInputEvents.CursorMoved">
             <summary>Raised after the player moves the in-game cursor.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IInputEvents.MouseWheelScrolled">
             <summary>Raised after the player scrolls the mouse wheel.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="T:StardewModdingAPI.Events.IModEvents">
             <summary>Manages access to events raised by SMAPI.</summary>
@@ -795,15 +868,23 @@
         </member>
         <member name="E:StardewModdingAPI.Events.IMultiplayerEvents.PeerContextReceived">
             <summary>Raised after the mod context for a peer is received. This happens before the game approves the connection (<see cref="E:StardewModdingAPI.Events.IMultiplayerEvents.PeerConnected"/>), so the player doesn't yet exist in the game. This is the earliest point where messages can be sent to the peer via SMAPI.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IMultiplayerEvents.PeerConnected">
             <summary>Raised after a peer connection is approved by the game.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IMultiplayerEvents.ModMessageReceived">
             <summary>Raised after a mod message is received over the network.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IMultiplayerEvents.PeerDisconnected">
             <summary>Raised after the connection with a peer is severed.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="T:StardewModdingAPI.Events.InventoryChangedEventArgs">
             <summary>Event arguments for an <see cref="E:StardewModdingAPI.Events.IPlayerEvents.InventoryChanged"/> event.</summary>
@@ -835,24 +916,36 @@
         </member>
         <member name="E:StardewModdingAPI.Events.IPlayerEvents.InventoryChanged">
             <summary>Raised after items are added or removed to a player's inventory. NOTE: this event is currently only raised for the current player.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IPlayerEvents.LevelChanged">
             <summary>Raised after a player skill level changes. This happens as soon as they level up, not when the game notifies the player after their character goes to bed.  NOTE: this event is currently only raised for the current player.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IPlayerEvents.Warped">
             <summary>Raised after a player warps to a new location. NOTE: this event is currently only raised for the current player.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="T:StardewModdingAPI.Events.ISpecializedEvents">
             <summary>Events serving specialized edge cases that shouldn't be used by most mods.</summary>
         </member>
         <member name="E:StardewModdingAPI.Events.ISpecializedEvents.LoadStageChanged">
             <summary>Raised when the low-level stage in the game's loading process has changed. This is an advanced event for mods which need to run code at specific points in the loading process. The available stages or when they happen might change without warning in future versions (e.g. due to changes in the game's load process), so mods using this event are more likely to break or have bugs. Most mods should use <see cref="T:StardewModdingAPI.Events.IGameLoopEvents"/> instead.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.ISpecializedEvents.UnvalidatedUpdateTicking">
             <summary>Raised before the game state is updated (≈60 times per second), regardless of normal SMAPI validation. This event is not thread-safe and may be invoked while game logic is running asynchronously. Changes to game state in this method may crash the game or corrupt an in-progress save. Do not use this event unless you're fully aware of the context in which your code will be run. Mods using this event will trigger a stability warning in the SMAPI console.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.ISpecializedEvents.UnvalidatedUpdateTicked">
             <summary>Raised after the game state is updated (≈60 times per second), regardless of normal SMAPI validation. This event is not thread-safe and may be invoked while game logic is running asynchronously. Changes to game state in this method may crash the game or corrupt an in-progress save. Do not use this event unless you're fully aware of the context in which your code will be run. Mods using this event will trigger a stability warning in the SMAPI console.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="T:StardewModdingAPI.Events.ItemStackSizeChange">
             <summary>An inventory item stack size change.</summary>
@@ -877,30 +970,48 @@
         </member>
         <member name="E:StardewModdingAPI.Events.IWorldEvents.LocationListChanged">
             <summary>Raised after a game location is added or removed.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IWorldEvents.BuildingListChanged">
             <summary>Raised after buildings are added or removed in a location.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IWorldEvents.DebrisListChanged">
             <summary>Raised after debris are added or removed in a location.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IWorldEvents.LargeTerrainFeatureListChanged">
             <summary>Raised after large terrain features (like bushes) are added or removed in a location.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IWorldEvents.NpcListChanged">
             <summary>Raised after NPCs are added or removed in a location.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IWorldEvents.ObjectListChanged">
             <summary>Raised after objects are added or removed in a location.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IWorldEvents.ChestInventoryChanged">
             <summary>Raised after items are added or removed from a chest.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IWorldEvents.TerrainFeatureListChanged">
             <summary>Raised after terrain features (like floors and trees) are added or removed in a location.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="E:StardewModdingAPI.Events.IWorldEvents.FurnitureListChanged">
             <summary>Raised after furniture are added or removed in a location.</summary>
+            <param name="sender">The event sender. This isn't applicable to SMAPI events, and is always null.</param>
+            <param name="e">The event data.</param>
         </member>
         <member name="T:StardewModdingAPI.Events.LargeTerrainFeatureListChangedEventArgs">
             <summary>Event arguments for a <see cref="E:StardewModdingAPI.Events.IWorldEvents.LargeTerrainFeatureListChanged"/> event.</summary>
@@ -1587,6 +1698,400 @@
             <param name="args">The command arguments.</param>
             <param name="monitor">Writes messages to the console.</param>
         </member>
+        <member name="T:StardewModdingAPI.Framework.Content.AssetData`1">
+            <summary>Base implementation for a content helper which encapsulates access and changes to content being read from a data file.</summary>
+            <typeparam name="TValue">The interface value type.</typeparam>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.AssetData`1.OnDataReplaced">
+            <summary>A callback to invoke when the data is replaced (if any).</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetData`1.Data">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetData`1.#ctor(System.String,StardewModdingAPI.IAssetName,`0,System.Func{System.String,System.String},System.Action{`0})">
+            <summary>Construct an instance.</summary>
+            <param name="locale">The content's locale code, if the content is localized.</param>
+            <param name="assetName">The asset name being read.</param>
+            <param name="data">The content data being read.</param>
+            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
+            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetData`1.ReplaceWith(`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:StardewModdingAPI.Framework.Content.AssetDataForDictionary`2">
+            <summary>Encapsulates access and changes to dictionary content being read from a data file.</summary>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForDictionary`2.#ctor(System.String,StardewModdingAPI.IAssetName,System.Collections.Generic.IDictionary{`0,`1},System.Func{System.String,System.String},System.Action{System.Collections.Generic.IDictionary{`0,`1}})">
+            <summary>Construct an instance.</summary>
+            <param name="locale">The content's locale code, if the content is localized.</param>
+            <param name="assetName">The asset name being read.</param>
+            <param name="data">The content data being read.</param>
+            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
+            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.Content.AssetDataForImage">
+            <summary>Encapsulates access and changes to image content being read from a data file.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.AssetDataForImage.MinOpacity">
+            <summary>The minimum value to consider non-transparent.</summary>
+            <remarks>On Linux/macOS, fully transparent pixels may have an alpha up to 4 for some reason.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.#ctor(System.String,StardewModdingAPI.IAssetName,Microsoft.Xna.Framework.Graphics.Texture2D,System.Func{System.String,System.String},System.Action{Microsoft.Xna.Framework.Graphics.Texture2D})">
+            <summary>Construct an instance.</summary>
+            <param name="locale">The content's locale code, if the content is localized.</param>
+            <param name="assetName">The asset name being read.</param>
+            <param name="data">The content data being read.</param>
+            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
+            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.PatchImage(StardewModdingAPI.IRawTextureData,System.Nullable{Microsoft.Xna.Framework.Rectangle},System.Nullable{Microsoft.Xna.Framework.Rectangle},StardewModdingAPI.PatchMode)">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.PatchImage(Microsoft.Xna.Framework.Graphics.Texture2D,System.Nullable{Microsoft.Xna.Framework.Rectangle},System.Nullable{Microsoft.Xna.Framework.Rectangle},StardewModdingAPI.PatchMode)">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.ExtendImage(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.GetPatchBounds(System.Nullable{Microsoft.Xna.Framework.Rectangle}@,System.Nullable{Microsoft.Xna.Framework.Rectangle}@,System.Int32,System.Int32)">
+            <summary>Get the bounds for an image patch.</summary>
+            <param name="sourceArea">The source area to set if needed.</param>
+            <param name="targetArea">The target area to set if needed.</param>
+            <param name="sourceWidth">The width of the full source image.</param>
+            <param name="sourceHeight">The height of the full source image.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.PatchImageImpl(Microsoft.Xna.Framework.Color[],System.Int32,System.Int32,Microsoft.Xna.Framework.Rectangle,Microsoft.Xna.Framework.Rectangle,StardewModdingAPI.PatchMode,System.Int32)">
+            <summary>Overwrite part of the image.</summary>
+            <param name="sourceData">The image data to patch into the content.</param>
+            <param name="sourceWidth">The pixel width of the original source image.</param>
+            <param name="sourceHeight">The pixel height of the original source image.</param>
+            <param name="sourceArea">The part of the <paramref name="sourceData"/> to copy (or <c>null</c> to take the whole texture). This must be within the bounds of the <paramref name="sourceData"/> texture.</param>
+            <param name="targetArea">The part of the content to patch (or <c>null</c> to patch the whole texture). The original content within this area will be erased. This must be within the bounds of the existing spritesheet.</param>
+            <param name="patchMode">Indicates how an image should be patched.</param>
+            <param name="startRow">The row to start on, for the sourceData.</param>
+            <exception cref="T:System.ArgumentNullException">One of the arguments is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">The <paramref name="targetArea"/> is outside the bounds of the spritesheet.</exception>
+            <exception cref="T:System.InvalidOperationException">The content being read isn't an image.</exception>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.Content.AssetDataForMap">
+            <summary>Encapsulates access and changes to image content being read from a data file.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.AssetDataForMap.Reflection">
+            <summary>Simplifies access to private code.</summary>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.#ctor(System.String,StardewModdingAPI.IAssetName,xTile.Map,System.Func{System.String,System.String},System.Action{xTile.Map},StardewModdingAPI.Framework.Reflection.Reflector)">
+            <summary>Construct an instance.</summary>
+            <param name="locale">The content's locale code, if the content is localized.</param>
+            <param name="assetName">The asset name being read.</param>
+            <param name="data">The content data being read.</param>
+            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
+            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
+            <param name="reflection">Simplifies access to private code.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.PatchMap(xTile.Map,System.Nullable{Microsoft.Xna.Framework.Rectangle},System.Nullable{Microsoft.Xna.Framework.Rectangle},StardewModdingAPI.PatchMapMode)">
+            <inheritdoc />
+            <remarks>Derived from <see cref="M:StardewValley.GameLocation.ApplyMapOverride(System.String,System.Nullable{Microsoft.Xna.Framework.Rectangle},System.Nullable{Microsoft.Xna.Framework.Rectangle})"/> with a few changes:
+            - can be applied directly to the maps when loading, before the location is created;
+            - added support for patch modes (overlay, replace by layer, or fully replace);
+            - added disambiguation if source has a modified version of the same tilesheet, instead of copying tiles into the target tilesheet;
+            - fixed copying tilesheets (avoid "The specified TileSheet was not created for use with this map" error);
+            - fixed tilesheets not added at the end (via z_ prefix), which can cause crashes in game code which depends on hardcoded tilesheet indexes;
+            - fixed issue where different tilesheets are linked by ID.
+            </remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.ExtendMap(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.CreateTile(xTile.Tiles.Tile,xTile.Layers.Layer,xTile.Tiles.TileSheet)">
+            <summary>Create a new tile for the target map.</summary>
+            <param name="sourceTile">The source tile to copy.</param>
+            <param name="targetLayer">The target layer.</param>
+            <param name="targetSheet">The target tilesheet.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.NormalizeTilesheetPathForComparison(System.String)">
+            <summary>Normalize a map tilesheet path for comparison. This value should *not* be used as the actual tilesheet path.</summary>
+            <param name="path">The path to normalize.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.GetMapArea(xTile.Map)">
+            <summary>Get a rectangle which encompasses all layers for a map.</summary>
+            <param name="map">The map to check.</param>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.Content.AssetDataForObject">
+            <summary>Encapsulates access and changes to content being read from a data file.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.AssetDataForObject.Reflection">
+            <summary>Simplifies access to private code.</summary>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.#ctor(System.String,StardewModdingAPI.IAssetName,System.Object,System.Func{System.String,System.String},StardewModdingAPI.Framework.Reflection.Reflector,System.Action{System.Object})">
+            <summary>Construct an instance.</summary>
+            <param name="locale">The content's locale code, if the content is localized.</param>
+            <param name="assetName">The asset name being read.</param>
+            <param name="data">The content data being read.</param>
+            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
+            <param name="reflection">Simplifies access to private code.</param>
+            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.#ctor(StardewModdingAPI.IAssetInfo,System.Object,System.Func{System.String,System.String},StardewModdingAPI.Framework.Reflection.Reflector,System.Action{System.Object})">
+            <summary>Construct an instance.</summary>
+            <param name="info">The asset metadata.</param>
+            <param name="data">The content data being read.</param>
+            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
+            <param name="reflection">Simplifies access to private code.</param>
+            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.AsDictionary``2">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.AsImage">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.AsMap">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.GetData``1">
+            <inheritdoc />
+        </member>
+        <member name="T:StardewModdingAPI.Framework.Content.AssetEditOperation">
+            <summary>An edit to apply to an asset when it's requested from the content pipeline.</summary>
+            <param name="Mod">The mod applying the edit.</param>
+            <param name="Priority">If there are multiple edits that apply to the same asset, the priority with which this one should be applied.</param>
+            <param name="OnBehalfOf">The content pack on whose behalf the edit is being applied, if any.</param>
+            <param name="ApplyEdit">Apply the edit to an asset.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetEditOperation.#ctor(StardewModdingAPI.Framework.IModMetadata,StardewModdingAPI.Events.AssetEditPriority,StardewModdingAPI.Framework.IModMetadata,System.Action{StardewModdingAPI.IAssetData})">
+            <summary>An edit to apply to an asset when it's requested from the content pipeline.</summary>
+            <param name="Mod">The mod applying the edit.</param>
+            <param name="Priority">If there are multiple edits that apply to the same asset, the priority with which this one should be applied.</param>
+            <param name="OnBehalfOf">The content pack on whose behalf the edit is being applied, if any.</param>
+            <param name="ApplyEdit">Apply the edit to an asset.</param>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetEditOperation.Mod">
+            <summary>The mod applying the edit.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetEditOperation.Priority">
+            <summary>If there are multiple edits that apply to the same asset, the priority with which this one should be applied.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetEditOperation.OnBehalfOf">
+            <summary>The content pack on whose behalf the edit is being applied, if any.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetEditOperation.ApplyEdit">
+            <summary>Apply the edit to an asset.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.AssetInfo.GetNormalizedPath">
+            <summary>Normalizes an asset key to match the cache key.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.AssetInfo.NameWithoutLocaleImpl">
+            <summary>The backing field for <see cref="P:StardewModdingAPI.Framework.Content.AssetInfo.NameWithoutLocale"/>.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetInfo.Locale">
+            <inheritdoc />
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetInfo.Name">
+            <inheritdoc />
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetInfo.NameWithoutLocale">
+            <inheritdoc />
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetInfo.DataType">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetInfo.#ctor(System.String,StardewModdingAPI.IAssetName,System.Type,System.Func{System.String,System.String})">
+            <summary>Construct an instance.</summary>
+            <param name="locale">The content's locale code, if the content is localized.</param>
+            <param name="assetName">The asset name being read.</param>
+            <param name="type">The content type being read.</param>
+            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetInfo.GetFriendlyTypeName(System.Type)">
+            <summary>Get a human-readable type name.</summary>
+            <param name="type">The type to name.</param>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.Content.AssetLoadOperation">
+            <summary>An operation which provides the initial instance of an asset when it's requested from the content pipeline.</summary>
+            <param name="Mod">The mod applying the edit.</param>
+            <param name="Priority">If there are multiple loads that apply to the same asset, the priority with which this one should be applied.</param>
+            <param name="OnBehalfOf">The content pack on whose behalf the asset is being loaded, if any.</param>
+            <param name="GetData">Load the initial value for an asset.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetLoadOperation.#ctor(StardewModdingAPI.Framework.IModMetadata,StardewModdingAPI.Framework.IModMetadata,StardewModdingAPI.Events.AssetLoadPriority,System.Func{StardewModdingAPI.IAssetInfo,System.Object})">
+            <summary>An operation which provides the initial instance of an asset when it's requested from the content pipeline.</summary>
+            <param name="Mod">The mod applying the edit.</param>
+            <param name="Priority">If there are multiple loads that apply to the same asset, the priority with which this one should be applied.</param>
+            <param name="OnBehalfOf">The content pack on whose behalf the asset is being loaded, if any.</param>
+            <param name="GetData">Load the initial value for an asset.</param>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetLoadOperation.Mod">
+            <summary>The mod applying the edit.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetLoadOperation.OnBehalfOf">
+            <summary>The content pack on whose behalf the asset is being loaded, if any.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetLoadOperation.Priority">
+            <summary>If there are multiple loads that apply to the same asset, the priority with which this one should be applied.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetLoadOperation.GetData">
+            <summary>Load the initial value for an asset.</summary>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.Content.AssetName">
+            <summary>An asset name that can be loaded through the content pipeline.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.AssetName.ComparableName">
+            <summary>A lowercase version of <see cref="P:StardewModdingAPI.Framework.Content.AssetName.Name"/> used for consistent hash codes and equality checks.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetName.Name">
+            <inheritdoc />
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetName.BaseName">
+            <inheritdoc />
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetName.LocaleCode">
+            <inheritdoc />
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetName.LanguageCode">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetName.#ctor(System.String,System.String,System.Nullable{StardewValley.LocalizedContentManager.LanguageCode})">
+            <summary>Construct an instance.</summary>
+            <param name="baseName">The base asset name without the locale code.</param>
+            <param name="localeCode">The locale code specified in the <see cref="P:StardewModdingAPI.Framework.Content.AssetName.Name"/>, if it's a valid code recognized by the game content.</param>
+            <param name="languageCode">The language code matching the <see cref="P:StardewModdingAPI.Framework.Content.AssetName.LocaleCode"/>, if applicable.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetName.Parse(System.String,System.Func{System.String,System.Nullable{StardewValley.LocalizedContentManager.LanguageCode}})">
+            <summary>Parse a raw asset name into an instance.</summary>
+            <param name="rawName">The raw asset name to parse.</param>
+            <param name="parseLocale">Get the language code for a given locale, if it's valid.</param>
+            <exception cref="T:System.ArgumentException">The <paramref name="rawName"/> is null or empty.</exception>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetName.IsEquivalentTo(System.String,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetName.IsEquivalentTo(StardewModdingAPI.IAssetName,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetName.StartsWith(System.String,System.Boolean,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetName.IsDirectlyUnderPath(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetName.StardewModdingAPI#IAssetName#GetBaseAssetName">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetName.Equals(StardewModdingAPI.IAssetName)">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetName.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetName.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:StardewModdingAPI.Framework.Content.AssetOperationGroup">
+            <summary>A set of operations to apply to an asset.</summary>
+            <param name="LoadOperations">The load operations to apply.</param>
+            <param name="EditOperations">The edit operations to apply.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.AssetOperationGroup.#ctor(System.Collections.Generic.List{StardewModdingAPI.Framework.Content.AssetLoadOperation},System.Collections.Generic.List{StardewModdingAPI.Framework.Content.AssetEditOperation})">
+            <summary>A set of operations to apply to an asset.</summary>
+            <param name="LoadOperations">The load operations to apply.</param>
+            <param name="EditOperations">The edit operations to apply.</param>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetOperationGroup.LoadOperations">
+            <summary>The load operations to apply.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.AssetOperationGroup.EditOperations">
+            <summary>The edit operations to apply.</summary>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.Content.ContentCache">
+            <summary>A low-level wrapper around the content cache which handles reading, writing, and invalidating entries in the cache. This doesn't handle any higher-level logic like localization, loading content, etc. It assumes all keys passed in are already normalized.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.ContentCache.Cache">
+            <summary>The underlying asset cache.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.ContentCache.Item(System.String)">
+            <summary>Get or set the value of a raw cache entry.</summary>
+            <param name="key">The cache key.</param>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.ContentCache.Keys">
+            <summary>The current cache keys.</summary>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.#ctor(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>Construct an instance.</summary>
+            <param name="loadedAssets">The asset cache for the underlying content manager.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.ContainsKey(System.String)">
+            <summary>Get whether the cache contains a given key.</summary>
+            <param name="key">The cache key.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.NormalizePathSeparators(System.String)">
+            <summary>Normalize path separators in an asset name.</summary>
+            <param name="path">The file path to normalize.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.NormalizeKey(System.String)">
+            <summary>Normalize a cache key so it's consistent with the underlying cache.</summary>
+            <param name="key">The asset key.</param>
+            <remarks>This is equivalent to <see cref="M:StardewModdingAPI.Framework.Content.ContentCache.NormalizePathSeparators(System.String)"/> with added file extension logic.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.Remove(System.String,System.Boolean)">
+            <summary>Remove an asset with the given key.</summary>
+            <param name="key">The cache key.</param>
+            <param name="dispose">Whether to dispose the entry value, if applicable.</param>
+            <returns>Returns the removed key (if any).</returns>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.Remove(System.Func{System.String,System.Object,System.Boolean},System.Boolean)">
+            <summary>Purge assets matching <paramref name="predicate"/> from the cache.</summary>
+            <param name="predicate">Matches the asset keys to invalidate.</param>
+            <param name="dispose">Whether to dispose invalidated assets. This should only be <see langword="true"/> when they're being invalidated as part of a <see cref="M:System.IDisposable.Dispose"/>, to avoid crashing the game.</param>
+            <returns>Returns any removed keys.</returns>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.Content.RawTextureData">
+            <summary>The raw data for an image read from the filesystem.</summary>
+            <param name="Width">The image width.</param>
+            <param name="Height">The image height.</param>
+            <param name="Data">The loaded image data.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.RawTextureData.#ctor(System.Int32,System.Int32,Microsoft.Xna.Framework.Color[])">
+            <summary>The raw data for an image read from the filesystem.</summary>
+            <param name="Width">The image width.</param>
+            <param name="Height">The image height.</param>
+            <param name="Data">The loaded image data.</param>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.RawTextureData.Width">
+            <summary>The image width.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.RawTextureData.Height">
+            <summary>The image height.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Framework.Content.RawTextureData.Data">
+            <summary>The loaded image data.</summary>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.Content.TilesheetReference">
+            <summary>Basic metadata about a vanilla tilesheet.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.TilesheetReference.Index">
+            <summary>The tilesheet's index in the list.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.TilesheetReference.Id">
+            <summary>The tilesheet's unique ID in the map.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.TilesheetReference.ImageSource">
+            <summary>The asset path for the tilesheet texture.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.TilesheetReference.SheetSize">
+            <summary>The number of tiles in the tilesheet.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.Content.TilesheetReference.TileSize">
+            <summary>The size of each tile in pixels.</summary>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.Content.TilesheetReference.#ctor(System.Int32,System.String,System.String,xTile.Dimensions.Size,xTile.Dimensions.Size)">
+            <summary>Construct an instance.</summary>
+            <param name="index">The tilesheet's index in the list.</param>
+            <param name="id">The tilesheet's unique ID in the map.</param>
+            <param name="imageSource">The asset path for the tilesheet texture.</param>
+            <param name="sheetSize">The number of tiles in the tilesheet.</param>
+            <param name="tileSize">The size of each tile in pixels.</param>
+        </member>
         <member name="T:StardewModdingAPI.Framework.ContentCoordinator">
             <summary>The central logic for creating content managers, invalidating caches, and propagating asset changes.</summary>
         </member>
@@ -2092,6 +2597,11 @@
             <param name="key">The local path to a content file relative to the mod folder.</param>
             <exception cref="T:System.ArgumentException">The <paramref name="key"/> is empty or contains invalid characters.</exception>
         </member>
+        <member name="M:StardewModdingAPI.Framework.ContentManagers.ModContentManager.ResolveAssetName(StardewModdingAPI.IAssetName)">
+            <summary>Get the relative mod file path from an asset name.</summary>
+            <param name="assetName">The asset name to parse.</param>
+            <exception cref="T:StardewModdingAPI.Framework.Exceptions.SContentLoadException">The <paramref name="assetName"/> matches a different mod's content manager.</exception>
+        </member>
         <member name="M:StardewModdingAPI.Framework.ContentManagers.ModContentManager.LoadFont``1(StardewModdingAPI.IAssetName,System.IO.FileInfo)">
             <summary>Load an unpacked font file (<c>.fnt</c>).</summary>
             <typeparam name="T">The type of asset to load.</typeparam>
@@ -2229,400 +2739,6 @@
         <member name="M:StardewModdingAPI.Framework.ContentPack.GetFile(System.String)">
             <summary>Get the underlying file info.</summary>
             <param name="relativePath">The normalized file path relative to the content pack directory.</param>
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.AssetData`1">
-            <summary>Base implementation for a content helper which encapsulates access and changes to content being read from a data file.</summary>
-            <typeparam name="TValue">The interface value type.</typeparam>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.AssetData`1.OnDataReplaced">
-            <summary>A callback to invoke when the data is replaced (if any).</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetData`1.Data">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetData`1.#ctor(System.String,StardewModdingAPI.IAssetName,`0,System.Func{System.String,System.String},System.Action{`0})">
-            <summary>Construct an instance.</summary>
-            <param name="locale">The content's locale code, if the content is localized.</param>
-            <param name="assetName">The asset name being read.</param>
-            <param name="data">The content data being read.</param>
-            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
-            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetData`1.ReplaceWith(`0)">
-            <inheritdoc />
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.AssetDataForDictionary`2">
-            <summary>Encapsulates access and changes to dictionary content being read from a data file.</summary>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForDictionary`2.#ctor(System.String,StardewModdingAPI.IAssetName,System.Collections.Generic.IDictionary{`0,`1},System.Func{System.String,System.String},System.Action{System.Collections.Generic.IDictionary{`0,`1}})">
-            <summary>Construct an instance.</summary>
-            <param name="locale">The content's locale code, if the content is localized.</param>
-            <param name="assetName">The asset name being read.</param>
-            <param name="data">The content data being read.</param>
-            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
-            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.AssetDataForImage">
-            <summary>Encapsulates access and changes to image content being read from a data file.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.AssetDataForImage.MinOpacity">
-            <summary>The minimum value to consider non-transparent.</summary>
-            <remarks>On Linux/macOS, fully transparent pixels may have an alpha up to 4 for some reason.</remarks>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.#ctor(System.String,StardewModdingAPI.IAssetName,Microsoft.Xna.Framework.Graphics.Texture2D,System.Func{System.String,System.String},System.Action{Microsoft.Xna.Framework.Graphics.Texture2D})">
-            <summary>Construct an instance.</summary>
-            <param name="locale">The content's locale code, if the content is localized.</param>
-            <param name="assetName">The asset name being read.</param>
-            <param name="data">The content data being read.</param>
-            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
-            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.PatchImage(StardewModdingAPI.IRawTextureData,System.Nullable{Microsoft.Xna.Framework.Rectangle},System.Nullable{Microsoft.Xna.Framework.Rectangle},StardewModdingAPI.PatchMode)">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.PatchImage(Microsoft.Xna.Framework.Graphics.Texture2D,System.Nullable{Microsoft.Xna.Framework.Rectangle},System.Nullable{Microsoft.Xna.Framework.Rectangle},StardewModdingAPI.PatchMode)">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.ExtendImage(System.Int32,System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.GetPatchBounds(System.Nullable{Microsoft.Xna.Framework.Rectangle}@,System.Nullable{Microsoft.Xna.Framework.Rectangle}@,System.Int32,System.Int32)">
-            <summary>Get the bounds for an image patch.</summary>
-            <param name="sourceArea">The source area to set if needed.</param>
-            <param name="targetArea">The target area to set if needed.</param>
-            <param name="sourceWidth">The width of the full source image.</param>
-            <param name="sourceHeight">The height of the full source image.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForImage.PatchImageImpl(Microsoft.Xna.Framework.Color[],System.Int32,System.Int32,Microsoft.Xna.Framework.Rectangle,Microsoft.Xna.Framework.Rectangle,StardewModdingAPI.PatchMode,System.Int32)">
-            <summary>Overwrite part of the image.</summary>
-            <param name="sourceData">The image data to patch into the content.</param>
-            <param name="sourceWidth">The pixel width of the original source image.</param>
-            <param name="sourceHeight">The pixel height of the original source image.</param>
-            <param name="sourceArea">The part of the <paramref name="sourceData"/> to copy (or <c>null</c> to take the whole texture). This must be within the bounds of the <paramref name="sourceData"/> texture.</param>
-            <param name="targetArea">The part of the content to patch (or <c>null</c> to patch the whole texture). The original content within this area will be erased. This must be within the bounds of the existing spritesheet.</param>
-            <param name="patchMode">Indicates how an image should be patched.</param>
-            <param name="startRow">The row to start on, for the sourceData.</param>
-            <exception cref="T:System.ArgumentNullException">One of the arguments is null.</exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">The <paramref name="targetArea"/> is outside the bounds of the spritesheet.</exception>
-            <exception cref="T:System.InvalidOperationException">The content being read isn't an image.</exception>
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.AssetDataForMap">
-            <summary>Encapsulates access and changes to image content being read from a data file.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.AssetDataForMap.Reflection">
-            <summary>Simplifies access to private code.</summary>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.#ctor(System.String,StardewModdingAPI.IAssetName,xTile.Map,System.Func{System.String,System.String},System.Action{xTile.Map},StardewModdingAPI.Framework.Reflection.Reflector)">
-            <summary>Construct an instance.</summary>
-            <param name="locale">The content's locale code, if the content is localized.</param>
-            <param name="assetName">The asset name being read.</param>
-            <param name="data">The content data being read.</param>
-            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
-            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
-            <param name="reflection">Simplifies access to private code.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.PatchMap(xTile.Map,System.Nullable{Microsoft.Xna.Framework.Rectangle},System.Nullable{Microsoft.Xna.Framework.Rectangle},StardewModdingAPI.PatchMapMode)">
-            <inheritdoc />
-            <remarks>Derived from <see cref="!:GameLocation.ApplyMapOverride(Map,string,Rectangle?,Rectangle?)"/> with a few changes:
-            - can be applied directly to the maps when loading, before the location is created;
-            - added support for patch modes (overlay, replace by layer, or fully replace);
-            - added disambiguation if source has a modified version of the same tilesheet, instead of copying tiles into the target tilesheet;
-            - fixed copying tilesheets (avoid "The specified TileSheet was not created for use with this map" error);
-            - fixed tilesheets not added at the end (via z_ prefix), which can cause crashes in game code which depends on hardcoded tilesheet indexes;
-            - fixed issue where different tilesheets are linked by ID.
-            </remarks>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.ExtendMap(System.Int32,System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.CreateTile(xTile.Tiles.Tile,xTile.Layers.Layer,xTile.Tiles.TileSheet)">
-            <summary>Create a new tile for the target map.</summary>
-            <param name="sourceTile">The source tile to copy.</param>
-            <param name="targetLayer">The target layer.</param>
-            <param name="targetSheet">The target tilesheet.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.NormalizeTilesheetPathForComparison(System.String)">
-            <summary>Normalize a map tilesheet path for comparison. This value should *not* be used as the actual tilesheet path.</summary>
-            <param name="path">The path to normalize.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForMap.GetMapArea(xTile.Map)">
-            <summary>Get a rectangle which encompasses all layers for a map.</summary>
-            <param name="map">The map to check.</param>
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.AssetDataForObject">
-            <summary>Encapsulates access and changes to content being read from a data file.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.AssetDataForObject.Reflection">
-            <summary>Simplifies access to private code.</summary>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.#ctor(System.String,StardewModdingAPI.IAssetName,System.Object,System.Func{System.String,System.String},StardewModdingAPI.Framework.Reflection.Reflector,System.Action{System.Object})">
-            <summary>Construct an instance.</summary>
-            <param name="locale">The content's locale code, if the content is localized.</param>
-            <param name="assetName">The asset name being read.</param>
-            <param name="data">The content data being read.</param>
-            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
-            <param name="reflection">Simplifies access to private code.</param>
-            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.#ctor(StardewModdingAPI.IAssetInfo,System.Object,System.Func{System.String,System.String},StardewModdingAPI.Framework.Reflection.Reflector,System.Action{System.Object})">
-            <summary>Construct an instance.</summary>
-            <param name="info">The asset metadata.</param>
-            <param name="data">The content data being read.</param>
-            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
-            <param name="reflection">Simplifies access to private code.</param>
-            <param name="onDataReplaced">A callback to invoke when the data is replaced (if any).</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.AsDictionary``2">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.AsImage">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.AsMap">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetDataForObject.GetData``1">
-            <inheritdoc />
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.AssetEditOperation">
-            <summary>An edit to apply to an asset when it's requested from the content pipeline.</summary>
-            <param name="Mod">The mod applying the edit.</param>
-            <param name="Priority">If there are multiple edits that apply to the same asset, the priority with which this one should be applied.</param>
-            <param name="OnBehalfOf">The content pack on whose behalf the edit is being applied, if any.</param>
-            <param name="ApplyEdit">Apply the edit to an asset.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetEditOperation.#ctor(StardewModdingAPI.Framework.IModMetadata,StardewModdingAPI.Events.AssetEditPriority,StardewModdingAPI.Framework.IModMetadata,System.Action{StardewModdingAPI.IAssetData})">
-            <summary>An edit to apply to an asset when it's requested from the content pipeline.</summary>
-            <param name="Mod">The mod applying the edit.</param>
-            <param name="Priority">If there are multiple edits that apply to the same asset, the priority with which this one should be applied.</param>
-            <param name="OnBehalfOf">The content pack on whose behalf the edit is being applied, if any.</param>
-            <param name="ApplyEdit">Apply the edit to an asset.</param>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetEditOperation.Mod">
-            <summary>The mod applying the edit.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetEditOperation.Priority">
-            <summary>If there are multiple edits that apply to the same asset, the priority with which this one should be applied.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetEditOperation.OnBehalfOf">
-            <summary>The content pack on whose behalf the edit is being applied, if any.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetEditOperation.ApplyEdit">
-            <summary>Apply the edit to an asset.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.AssetInfo.GetNormalizedPath">
-            <summary>Normalizes an asset key to match the cache key.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.AssetInfo.NameWithoutLocaleImpl">
-            <summary>The backing field for <see cref="P:StardewModdingAPI.Framework.Content.AssetInfo.NameWithoutLocale"/>.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetInfo.Locale">
-            <inheritdoc />
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetInfo.Name">
-            <inheritdoc />
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetInfo.NameWithoutLocale">
-            <inheritdoc />
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetInfo.DataType">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetInfo.#ctor(System.String,StardewModdingAPI.IAssetName,System.Type,System.Func{System.String,System.String})">
-            <summary>Construct an instance.</summary>
-            <param name="locale">The content's locale code, if the content is localized.</param>
-            <param name="assetName">The asset name being read.</param>
-            <param name="type">The content type being read.</param>
-            <param name="getNormalizedPath">Normalizes an asset key to match the cache key.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetInfo.GetFriendlyTypeName(System.Type)">
-            <summary>Get a human-readable type name.</summary>
-            <param name="type">The type to name.</param>
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.AssetLoadOperation">
-            <summary>An operation which provides the initial instance of an asset when it's requested from the content pipeline.</summary>
-            <param name="Mod">The mod applying the edit.</param>
-            <param name="Priority">If there are multiple loads that apply to the same asset, the priority with which this one should be applied.</param>
-            <param name="OnBehalfOf">The content pack on whose behalf the asset is being loaded, if any.</param>
-            <param name="GetData">Load the initial value for an asset.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetLoadOperation.#ctor(StardewModdingAPI.Framework.IModMetadata,StardewModdingAPI.Framework.IModMetadata,StardewModdingAPI.Events.AssetLoadPriority,System.Func{StardewModdingAPI.IAssetInfo,System.Object})">
-            <summary>An operation which provides the initial instance of an asset when it's requested from the content pipeline.</summary>
-            <param name="Mod">The mod applying the edit.</param>
-            <param name="Priority">If there are multiple loads that apply to the same asset, the priority with which this one should be applied.</param>
-            <param name="OnBehalfOf">The content pack on whose behalf the asset is being loaded, if any.</param>
-            <param name="GetData">Load the initial value for an asset.</param>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetLoadOperation.Mod">
-            <summary>The mod applying the edit.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetLoadOperation.OnBehalfOf">
-            <summary>The content pack on whose behalf the asset is being loaded, if any.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetLoadOperation.Priority">
-            <summary>If there are multiple loads that apply to the same asset, the priority with which this one should be applied.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetLoadOperation.GetData">
-            <summary>Load the initial value for an asset.</summary>
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.AssetName">
-            <summary>An asset name that can be loaded through the content pipeline.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.AssetName.ComparableName">
-            <summary>A lowercase version of <see cref="P:StardewModdingAPI.Framework.Content.AssetName.Name"/> used for consistent hash codes and equality checks.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetName.Name">
-            <inheritdoc />
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetName.BaseName">
-            <inheritdoc />
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetName.LocaleCode">
-            <inheritdoc />
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetName.LanguageCode">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetName.#ctor(System.String,System.String,System.Nullable{StardewValley.LocalizedContentManager.LanguageCode})">
-            <summary>Construct an instance.</summary>
-            <param name="baseName">The base asset name without the locale code.</param>
-            <param name="localeCode">The locale code specified in the <see cref="P:StardewModdingAPI.Framework.Content.AssetName.Name"/>, if it's a valid code recognized by the game content.</param>
-            <param name="languageCode">The language code matching the <see cref="P:StardewModdingAPI.Framework.Content.AssetName.LocaleCode"/>, if applicable.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetName.Parse(System.String,System.Func{System.String,System.Nullable{StardewValley.LocalizedContentManager.LanguageCode}})">
-            <summary>Parse a raw asset name into an instance.</summary>
-            <param name="rawName">The raw asset name to parse.</param>
-            <param name="parseLocale">Get the language code for a given locale, if it's valid.</param>
-            <exception cref="T:System.ArgumentException">The <paramref name="rawName"/> is null or empty.</exception>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetName.IsEquivalentTo(System.String,System.Boolean)">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetName.IsEquivalentTo(StardewModdingAPI.IAssetName,System.Boolean)">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetName.StartsWith(System.String,System.Boolean,System.Boolean)">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetName.IsDirectlyUnderPath(System.String)">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetName.StardewModdingAPI#IAssetName#GetBaseAssetName">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetName.Equals(StardewModdingAPI.IAssetName)">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetName.GetHashCode">
-            <inheritdoc />
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetName.ToString">
-            <inheritdoc />
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.AssetOperationGroup">
-            <summary>A set of operations to apply to an asset.</summary>
-            <param name="LoadOperations">The load operations to apply.</param>
-            <param name="EditOperations">The edit operations to apply.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.AssetOperationGroup.#ctor(System.Collections.Generic.List{StardewModdingAPI.Framework.Content.AssetLoadOperation},System.Collections.Generic.List{StardewModdingAPI.Framework.Content.AssetEditOperation})">
-            <summary>A set of operations to apply to an asset.</summary>
-            <param name="LoadOperations">The load operations to apply.</param>
-            <param name="EditOperations">The edit operations to apply.</param>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetOperationGroup.LoadOperations">
-            <summary>The load operations to apply.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.AssetOperationGroup.EditOperations">
-            <summary>The edit operations to apply.</summary>
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.ContentCache">
-            <summary>A low-level wrapper around the content cache which handles reading, writing, and invalidating entries in the cache. This doesn't handle any higher-level logic like localization, loading content, etc. It assumes all keys passed in are already normalized.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.ContentCache.Cache">
-            <summary>The underlying asset cache.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.ContentCache.Item(System.String)">
-            <summary>Get or set the value of a raw cache entry.</summary>
-            <param name="key">The cache key.</param>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.ContentCache.Keys">
-            <summary>The current cache keys.</summary>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.#ctor(System.Collections.Generic.Dictionary{System.String,System.Object})">
-            <summary>Construct an instance.</summary>
-            <param name="loadedAssets">The asset cache for the underlying content manager.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.ContainsKey(System.String)">
-            <summary>Get whether the cache contains a given key.</summary>
-            <param name="key">The cache key.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.NormalizePathSeparators(System.String)">
-            <summary>Normalize path separators in an asset name.</summary>
-            <param name="path">The file path to normalize.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.NormalizeKey(System.String)">
-            <summary>Normalize a cache key so it's consistent with the underlying cache.</summary>
-            <param name="key">The asset key.</param>
-            <remarks>This is equivalent to <see cref="M:StardewModdingAPI.Framework.Content.ContentCache.NormalizePathSeparators(System.String)"/> with added file extension logic.</remarks>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.Remove(System.String,System.Boolean)">
-            <summary>Remove an asset with the given key.</summary>
-            <param name="key">The cache key.</param>
-            <param name="dispose">Whether to dispose the entry value, if applicable.</param>
-            <returns>Returns the removed key (if any).</returns>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.ContentCache.Remove(System.Func{System.String,System.Object,System.Boolean},System.Boolean)">
-            <summary>Purge assets matching <paramref name="predicate"/> from the cache.</summary>
-            <param name="predicate">Matches the asset keys to invalidate.</param>
-            <param name="dispose">Whether to dispose invalidated assets. This should only be <see langword="true"/> when they're being invalidated as part of a <see cref="M:System.IDisposable.Dispose"/>, to avoid crashing the game.</param>
-            <returns>Returns any removed keys.</returns>
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.RawTextureData">
-            <summary>The raw data for an image read from the filesystem.</summary>
-            <param name="Width">The image width.</param>
-            <param name="Height">The image height.</param>
-            <param name="Data">The loaded image data.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.RawTextureData.#ctor(System.Int32,System.Int32,Microsoft.Xna.Framework.Color[])">
-            <summary>The raw data for an image read from the filesystem.</summary>
-            <param name="Width">The image width.</param>
-            <param name="Height">The image height.</param>
-            <param name="Data">The loaded image data.</param>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.RawTextureData.Width">
-            <summary>The image width.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.RawTextureData.Height">
-            <summary>The image height.</summary>
-        </member>
-        <member name="P:StardewModdingAPI.Framework.Content.RawTextureData.Data">
-            <summary>The loaded image data.</summary>
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Content.TilesheetReference">
-            <summary>Basic metadata about a vanilla tilesheet.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.TilesheetReference.Index">
-            <summary>The tilesheet's index in the list.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.TilesheetReference.Id">
-            <summary>The tilesheet's unique ID in the map.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.TilesheetReference.ImageSource">
-            <summary>The asset path for the tilesheet texture.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.TilesheetReference.SheetSize">
-            <summary>The number of tiles in the tilesheet.</summary>
-        </member>
-        <member name="F:StardewModdingAPI.Framework.Content.TilesheetReference.TileSize">
-            <summary>The size of each tile in pixels.</summary>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Content.TilesheetReference.#ctor(System.Int32,System.String,System.String,xTile.Dimensions.Size,xTile.Dimensions.Size)">
-            <summary>Construct an instance.</summary>
-            <param name="index">The tilesheet's index in the list.</param>
-            <param name="id">The tilesheet's unique ID in the map.</param>
-            <param name="imageSource">The asset path for the tilesheet texture.</param>
-            <param name="sheetSize">The number of tiles in the tilesheet.</param>
-            <param name="tileSize">The size of each tile in pixels.</param>
         </member>
         <member name="T:StardewModdingAPI.Framework.CursorPosition">
             <summary>Defines a position on a given map at different reference points.</summary>
@@ -3997,6 +4113,9 @@
         <member name="P:StardewModdingAPI.Framework.Models.SConfig.CheckForUpdates">
             <summary>Whether to check for newer versions of SMAPI and mods on startup.</summary>
         </member>
+        <member name="P:StardewModdingAPI.Framework.Models.SConfig.CheckContentIntegrity">
+            <summary>Whether SMAPI should check whether the content files are present and unmodified.</summary>
+        </member>
         <member name="P:StardewModdingAPI.Framework.Models.SConfig.ListenForConsoleInput">
             <summary>Whether SMAPI should listen for console input to support console commands.</summary>
         </member>
@@ -4046,10 +4165,11 @@
         <member name="P:StardewModdingAPI.Framework.Models.SConfig.ModsToLoadLate">
             <summary>The mod IDs SMAPI should load after any other mods.</summary>
         </member>
-        <member name="M:StardewModdingAPI.Framework.Models.SConfig.#ctor(System.Boolean,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.String,System.String,System.String[],System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},StardewModdingAPI.Internal.ConsoleWriting.ColorSchemeConfig,System.Nullable{System.Boolean},System.String[],System.String[],System.String[])">
+        <member name="M:StardewModdingAPI.Framework.Models.SConfig.#ctor(System.Boolean,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.String,System.String,System.String[],System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},StardewModdingAPI.Internal.ConsoleWriting.ColorSchemeConfig,System.Nullable{System.Boolean},System.String[],System.String[],System.String[])">
             <summary>Construct an instance.</summary>
             <param name="developerMode"><inheritdoc cref="P:StardewModdingAPI.Framework.Models.SConfig.DeveloperMode" path="/summary" /></param>
             <param name="checkForUpdates"><inheritdoc cref="P:StardewModdingAPI.Framework.Models.SConfig.CheckForUpdates" path="/summary" /></param>
+            <param name="checkContentIntegrity"><inheritdoc cref="P:StardewModdingAPI.Framework.Models.SConfig.CheckContentIntegrity" path="/summary" /></param>
             <param name="listenForConsoleInput"><inheritdoc cref="P:StardewModdingAPI.Framework.Models.SConfig.ListenForConsoleInput" path="/summary" /></param>
             <param name="paranoidWarnings"><inheritdoc cref="P:StardewModdingAPI.Framework.Models.SConfig.ParanoidWarnings" path="/summary" /></param>
             <param name="useBetaChannel"><inheritdoc cref="P:StardewModdingAPI.Framework.Models.SConfig.UseBetaChannel" path="/summary" /></param>
@@ -4210,6 +4330,9 @@
         <member name="M:StardewModdingAPI.Framework.ModHelpers.GameContentHelper.ParseAssetName(System.String)">
             <inheritdoc />
         </member>
+        <member name="M:StardewModdingAPI.Framework.ModHelpers.GameContentHelper.DoesAssetExist``1(StardewModdingAPI.IAssetName)">
+            <inheritdoc />
+        </member>
         <member name="M:StardewModdingAPI.Framework.ModHelpers.GameContentHelper.Load``1(System.String)">
             <inheritdoc />
         </member>
@@ -4257,6 +4380,9 @@
         <member name="M:StardewModdingAPI.Framework.ModHelpers.InputHelper.Suppress(StardewModdingAPI.SButton)">
             <inheritdoc />
         </member>
+        <member name="M:StardewModdingAPI.Framework.ModHelpers.InputHelper.SuppressScrollWheel">
+            <inheritdoc />
+        </member>
         <member name="M:StardewModdingAPI.Framework.ModHelpers.InputHelper.SuppressActiveKeybinds(StardewModdingAPI.Utilities.KeybindList)">
             <inheritdoc />
         </member>
@@ -4286,6 +4412,9 @@
             <param name="modName">The friendly mod name for use in errors.</param>
             <param name="gameContentManager">The game content manager used for map tilesheets not provided by the mod.</param>
             <param name="reflection">Simplifies access to private code.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModHelpers.ModContentHelper.DoesAssetExist``1(System.String)">
+            <inheritdoc />
         </member>
         <member name="M:StardewModdingAPI.Framework.ModHelpers.ModContentHelper.Load``1(System.String)">
             <inheritdoc />
@@ -5696,6 +5825,61 @@
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.AnimalHouse"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
+        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade">
+            <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.ArgUtility"/> methods to their newer form to avoid breaking older mods.</summary>
+            <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="F:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.DefaultName">
+            <summary>The default argument name for mods that predate the name field.</summary>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGet(System.String[],System.Int32,System.String@,System.String@,System.Boolean)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetOptional(System.String[],System.Int32,System.String@,System.String@,System.String,System.Boolean)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetBool(System.String[],System.Int32,System.Boolean@,System.String@)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetOptionalBool(System.String[],System.Int32,System.Boolean@,System.String@,System.Boolean)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetDirection(System.String[],System.Int32,System.Int32@,System.String@)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetOptionalDirection(System.String[],System.Int32,System.Int32@,System.String@,System.Int32)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetEnum``1(System.String[],System.Int32,``0@,System.String@)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetOptionalEnum``1(System.String[],System.Int32,``0@,System.String@,``0)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetFloat(System.String[],System.Int32,System.Single@,System.String@)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetOptionalFloat(System.String[],System.Int32,System.Single@,System.String@,System.Single)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetInt(System.String[],System.Int32,System.Int32@,System.String@)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetOptionalInt(System.String[],System.Int32,System.Int32@,System.String@,System.Int32)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetPoint(System.String[],System.Int32,Microsoft.Xna.Framework.Point@,System.String@)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetRectangle(System.String[],System.Int32,Microsoft.Xna.Framework.Rectangle@,System.String@)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetVector2(System.String[],System.Int32,Microsoft.Xna.Framework.Vector2@,System.String@,System.Boolean)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ArgUtilityFacade.TryGetRemainder(System.String[],System.Int32,System.String@,System.String@,System.Char)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.BasicProjectileFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Projectiles.BasicProjectile"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
@@ -5808,6 +5992,9 @@
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Farmer"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.FarmerFacade.showReceiveNewItemMessage(StardewValley.Farmer,StardewValley.Item)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.FarmerRendererFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.FarmerRenderer"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
@@ -5820,12 +6007,19 @@
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Farm"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.FarmFacade.showShipment(StardewValley.Object,System.Boolean)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.FenceFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Fence"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.FishingRodFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Tools.FishingRod"/> methods to their newer form to avoid breaking older mods.</summary>
+            <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.FishPondRewardFacade">
+            <summary>Maps Stardew Valley 1.6.8's <see cref="T:StardewValley.GameData.FishPonds.FishPondReward"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.FishTankFurnitureFacade">
@@ -5852,6 +6046,52 @@
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.GameLocation"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.GetContainingBuilding">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.getLightSource(System.Int32)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.getTileIndexAt(xTile.Dimensions.Location,System.String)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.getTileIndexAt(Microsoft.Xna.Framework.Point,System.String)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.getTileIndexAt(System.Int32,System.Int32,System.String)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.hasLightSource(System.Int32)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.makeHoeDirt(Microsoft.Xna.Framework.Vector2,System.Boolean)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.moveObject(System.Int32,System.Int32,System.Int32,System.Int32,System.String)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.repositionLightSource(System.Int32,Microsoft.Xna.Framework.Vector2)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.removeLightSource(System.Int32)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.setAnimatedMapTile(System.Int32,System.Int32,System.Int32[],System.Int64,System.String,System.String,System.Int32)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.setMapTile(System.Int32,System.Int32,System.Int32,System.String,System.String,System.Int32)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.setMapTileIndex(System.Int32,System.Int32,System.Int32,System.String,System.Int32)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GameLocationFacade.TryGetTileSheetId(StardewValley.GameLocation,System.Int32,System.String@)">
+            <summary>Get the ID for the tilesheet at the given index in this location's <see cref="P:xTile.Map.TileSheets"/>.</summary>
+            <param name="location">The location whose tilesheets to search.</param>
+            <param name="index">The index to check.</param>
+            <param name="id">The ID of the tilesheet, if found.</param>
+            <returns>Returns whether the index was within the bounds of the tilesheet list.</returns>
+        </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.GiantCropFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.TerrainFeatures.GiantCrop"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
@@ -5872,7 +6112,7 @@
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Menus.IClickableMenu"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
-        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ImplicitConversionOperators">
+        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ImplicitConversionOperatorsFacade">
             <summary>Reimplements implicit conversion operators that were removed in 1.6 for sealed classes.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
@@ -5948,8 +6188,19 @@
         <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.Internal.ReadOnlyValueToNetString.Set(System.String)">
             <inheritdoc />
         </member>
+        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.IslandWestFacade">
+            <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Locations.IslandWest"/> methods to their newer form to avoid breaking older mods.</summary>
+            <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.IslandWestFacade.showShipment(StardewValley.Object,System.Boolean)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ItemFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Item"/> methods to their newer form to avoid breaking older mods.</summary>
+            <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ItemQueryContextFacade">
+            <summary>Maps Stardew Valley 1.6's <see cref="T:StardewValley.Internal.ItemQueryContext"/> methods to their newer form in 1.6.14 to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.JunimoHutFacade">
@@ -5967,6 +6218,19 @@
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.LibraryMuseumFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Locations.LibraryMuseum"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.LightSourceFacade">
+            <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.LightSource"/> methods to their newer form to avoid breaking older mods.</summary>
+            <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.LightSourceFacade.Constructor(System.Int32,Microsoft.Xna.Framework.Vector2,System.Single,Microsoft.Xna.Framework.Color,StardewValley.LightSource.LightContext,System.Int64)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.LightSourceFacade.Constructor(System.Int32,Microsoft.Xna.Framework.Vector2,System.Single,Microsoft.Xna.Framework.Color,System.Int32,StardewValley.LightSource.LightContext,System.Int64)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.LightSourceFacade.Constructor(System.Int32,Microsoft.Xna.Framework.Vector2,System.Single,StardewValley.LightSource.LightContext,System.Int64)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
         </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.LocalizedContentManagerFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.LocalizedContentManager"/> methods to their newer form to avoid breaking older mods.</summary>
@@ -6040,9 +6304,35 @@
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Objects.Ring"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
+        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ShippingBinFacade">
+            <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Buildings.ShippingBin"/> methods to their newer form to avoid breaking older mods.</summary>
+            <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ShippingBinFacade.showShipment(StardewValley.Object,System.Boolean)">
+            <remarks>Changed in Stardew Valley 1.6.9.</remarks>
+        </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ShopMenuFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Menus.ShopMenu"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ShopMenuFacade.Constructor(System.Collections.Generic.Dictionary{StardewValley.ISalable,System.Int32[]},System.Int32,System.String,System.Func{StardewValley.ISalable,StardewValley.Farmer,System.Int32,System.Boolean},System.Func{StardewValley.ISalable,System.Boolean},System.String)">
+            <remarks>Changed in 1.6.0.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ShopMenuFacade.Constructor(System.Collections.Generic.List{StardewValley.ISalable},System.Int32,System.String,System.Func{StardewValley.ISalable,StardewValley.Farmer,System.Int32,System.Boolean},System.Func{StardewValley.ISalable,System.Boolean},System.String)">
+            <remarks>Changed in 1.6.0.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ShopMenuFacade.Constructor(System.String,StardewValley.GameData.Shops.ShopData,StardewValley.GameData.Shops.ShopOwnerData,StardewValley.NPC,System.Func{StardewValley.ISalable,StardewValley.Farmer,System.Int32,System.Boolean},System.Func{StardewValley.ISalable,System.Boolean},System.Boolean)">
+            <remarks>Changed in 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ShopMenuFacade.Constructor(System.String,System.Collections.Generic.Dictionary{StardewValley.ISalable,StardewValley.ItemStockInformation},System.Int32,System.String,System.Func{StardewValley.ISalable,StardewValley.Farmer,System.Int32,System.Boolean},System.Func{StardewValley.ISalable,System.Boolean},System.Boolean)">
+            <remarks>Changed in 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ShopMenuFacade.Constructor(System.String,System.Collections.Generic.List{StardewValley.ISalable},System.Int32,System.String,System.Func{StardewValley.ISalable,StardewValley.Farmer,System.Int32,System.Boolean},System.Func{StardewValley.ISalable,System.Boolean},System.Boolean)">
+            <remarks>Changed in 1.6.9.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ShopMenuFacade.ToOnPurchaseDelegate(System.Func{StardewValley.ISalable,StardewValley.Farmer,System.Int32,System.Boolean})">
+            <summary>Convert a pre-1.6.9 <see cref="F:StardewValley.Menus.ShopMenu.onPurchase"/> callback into its new delegate type.</summary>
+            <param name="onPurchase">The callback to convert.</param>
         </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.SignFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Objects.Sign"/> methods to their newer form to avoid breaking older mods.</summary>
@@ -6107,6 +6397,21 @@
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.WorldDateFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.WorldDate"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.WorldMapManagerFacade">
+            <summary>Maps Stardew Valley 1.'s <see cref="T:StardewValley.WorldMaps.WorldMapManager"/> methods to their newer form in 1.6.14 to avoid breaking older mods.</summary>
+            <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.WorldMapManagerFacade.GetPositionData(StardewValley.GameLocation,Microsoft.Xna.Framework.Point)">
+            <summary>Get the map position which contains a given location and tile coordinate, if any.</summary>
+            <param name="location">The in-game location.</param>
+            <param name="tile">The tile coordinate within the location.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.WorldMapManagerFacade.GetPositionData(StardewValley.GameLocation,Microsoft.Xna.Framework.Point,StardewValley.Internal.LogBuilder)">
+            <summary>Get the map position which contains a given location and tile coordinate, if any.</summary>
+            <param name="location">The in-game location.</param>
+            <param name="tile">The tile coordinate within the location.</param>
+            <param name="log">The detailed log to update with the steps used to match the position, if set.</param>
         </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Symbols.SymbolReader">
             <summary>Reads symbol data for an assembly.</summary>
@@ -6724,11 +7029,8 @@
             <param name="contentManager">The content manager through which to load tiles.</param>
             <param name="graphicsDevice">The graphics device with which to render tiles.</param>
         </member>
-        <member name="M:StardewModdingAPI.Framework.Rendering.SDisplayDevice.DrawTile(xTile.Tiles.Tile,xTile.Dimensions.Location,System.Single)">
-            <summary>Draw a tile to the screen.</summary>
-            <param name="tile">The tile to draw.</param>
-            <param name="location">The tile position to draw.</param>
-            <param name="layerDepth">The layer depth at which to draw.</param>
+        <member name="M:StardewModdingAPI.Framework.Rendering.SDisplayDevice.DrawImpl(xTile.Tiles.Tile,xTile.Dimensions.Location,System.Single,Microsoft.Xna.Framework.Graphics.Texture2D)">
+            <inheritdoc />
         </member>
         <member name="M:StardewModdingAPI.Framework.Rendering.SDisplayDevice.GetSpriteEffects(xTile.Tiles.Tile)">
             <summary>Get the sprite effects to apply for a tile.</summary>
@@ -6737,46 +7039,6 @@
         <member name="M:StardewModdingAPI.Framework.Rendering.SDisplayDevice.GetRotation(xTile.Tiles.Tile)">
             <summary>Get the draw rotation to apply for a tile.</summary>
             <param name="tile">The tile being drawn.</param>
-        </member>
-        <member name="T:StardewModdingAPI.Framework.Rendering.SXnaDisplayDevice">
-            <summary>A map display device which reimplements the default logic.</summary>
-            <remarks>This is an exact copy of <see cref="T:xTile.Display.XnaDisplayDevice"/>, except that private fields are protected and all methods are virtual.</remarks>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Rendering.SXnaDisplayDevice.#ctor(Microsoft.Xna.Framework.Content.ContentManager,Microsoft.Xna.Framework.Graphics.GraphicsDevice)">
-            <summary>Construct an instance.</summary>
-            <param name="contentManager">The content manager through which to load tiles.</param>
-            <param name="graphicsDevice">The graphics device with which to render tiles.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Rendering.SXnaDisplayDevice.LoadTileSheet(xTile.Tiles.TileSheet)">
-            <summary>Load a tilesheet texture.</summary>
-            <param name="tileSheet">The tilesheet instance.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Rendering.SXnaDisplayDevice.DisposeTileSheet(xTile.Tiles.TileSheet)">
-            <summary>Unload a tilesheet texture.</summary>
-            <param name="tileSheet">The tilesheet instance.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Rendering.SXnaDisplayDevice.BeginScene(Microsoft.Xna.Framework.Graphics.SpriteBatch)">
-            <summary>Prepare to render to the screen.</summary>
-            <param name="b">The sprite batch being rendered.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Rendering.SXnaDisplayDevice.SetClippingRegion(xTile.Dimensions.Rectangle)">
-            <summary>Set the clipping region.</summary>
-            <param name="clippingRegion">The clipping region.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Rendering.SXnaDisplayDevice.DrawTile(xTile.Tiles.Tile,xTile.Dimensions.Location,System.Single)">
-            <summary>Draw a tile to the screen.</summary>
-            <param name="tile">The tile to draw.</param>
-            <param name="location">The tile position to draw.</param>
-            <param name="layerDepth">The layer depth at which to draw.</param>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Rendering.SXnaDisplayDevice.EndScene">
-            <summary>Finish drawing to the screen.</summary>
-        </member>
-        <member name="M:StardewModdingAPI.Framework.Rendering.SXnaDisplayDevice.Clamp(System.Int32,System.Int32,System.Int32)">
-            <summary>Snap a value to the given range.</summary>
-            <param name="nValue">The value to normalize.</param>
-            <param name="nMin">The minimum value.</param>
-            <param name="nMax">The maximum value.</param>
         </member>
         <member name="T:StardewModdingAPI.Framework.SChatBox">
             <summary>SMAPI's implementation of the chat box which intercepts errors for logging.</summary>
@@ -7018,6 +7280,9 @@
             <summary>Asynchronously check for a new version of SMAPI and any installed mods, and print alerts to the console if an update is available.</summary>
             <param name="mods">The mods to include in the update check (if eligible).</param>
         </member>
+        <member name="M:StardewModdingAPI.Framework.SCore.LogContentIntegrityIssues">
+            <summary>Verify the game's content files and log a warning if any are missing or modified.</summary>
+        </member>
         <member name="M:StardewModdingAPI.Framework.SCore.VerifyPath(System.String)">
             <summary>Create a directory path if it doesn't exist.</summary>
             <param name="path">The directory path.</param>
@@ -7043,6 +7308,12 @@
             <param name="errorReasonPhrase">The user-facing reason phrase explaining why the mod couldn't be loaded (if applicable).</param>
             <param name="errorDetails">More detailed info about the error intended for developers (if any).</param>
             <returns>Returns whether the mod was successfully loaded.</returns>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.SCore.TryGetAssemblyVersion(System.String,System.String@)">
+            <summary>Get the display version for an assembly file, if it's valid.</summary>
+            <param name="filePath">The absolute path to the assembly file.</param>
+            <param name="versionString">The extracted display version, if valid.</param>
+            <returns>Returns whether the assembly version was successfully extracted.</returns>
         </member>
         <member name="M:StardewModdingAPI.Framework.SCore.CreateFakeContentPack(System.String,StardewModdingAPI.IManifest,StardewModdingAPI.Framework.ContentCoordinator,StardewModdingAPI.Framework.IModMetadata)">
             <summary>Create a fake content pack instance for a parent mod.</summary>
@@ -7075,6 +7346,10 @@
             <summary>Read translations from a directory containing JSON translation files.</summary>
             <param name="folderPath">The folder path to search.</param>
             <param name="errors">The errors indicating why translation files couldn't be parsed, indexed by translation filename.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.SCore.GetTranslationFiles(System.String)">
+            <summary>Get the translation files to load. This returns top-level files like <c>fr.json</c> first, followed by locale directory files like <c>fr/example.json</c>.</summary>
+            <param name="folderPath">The folder path to search.</param>
         </member>
         <member name="M:StardewModdingAPI.Framework.SCore.GetFileLookup(System.String)">
             <summary>Get a file lookup for the given directory.</summary>
@@ -7296,6 +7571,9 @@
             <remarks>This is intended for use by <see cref="T:StardewModdingAPI.Utilities.Keybind"/> and shouldn't be used directly in most cases.</remarks>
         </member>
         <member name="M:StardewModdingAPI.Framework.SGame.LoadContent">
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.SGame.ShouldDrawOnBuffer">
             <inheritdoc />
         </member>
         <member name="M:StardewModdingAPI.Framework.SGame.CreateContentManager(System.IServiceProvider,System.String)">
@@ -9059,6 +9337,11 @@
             <param name="rawName">The raw asset name to parse.</param>
             <exception cref="T:System.ArgumentException">The <paramref name="rawName"/> is null or empty.</exception>
         </member>
+        <member name="M:StardewModdingAPI.IGameContentHelper.DoesAssetExist``1(StardewModdingAPI.IAssetName)">
+            <summary>Get whether an asset exists and can be loaded.</summary>
+            <typeparam name="T">The expected asset type.</typeparam>
+            <param name="assetName">The normalized asset name.</param>
+        </member>
         <member name="M:StardewModdingAPI.IGameContentHelper.Load``1(System.String)">
             <summary>Load content from the game folder or mod folder (if not already cached), and return it. When loading a <c>.png</c> file, this must be called outside the game's draw loop.</summary>
             <typeparam name="T">The expected data type. The main supported types are <see cref="T:xTile.Map"/>, <see cref="T:Microsoft.Xna.Framework.Graphics.Texture2D"/>, dictionaries, and lists; other types may be supported by the game's content pipeline.</typeparam>
@@ -9119,6 +9402,9 @@
             <summary>Prevent the game from handling a button press. This doesn't prevent other mods from receiving the event.</summary>
             <param name="button">The button to suppress.</param>
         </member>
+        <member name="M:StardewModdingAPI.IInputHelper.SuppressScrollWheel">
+            <summary>Suppress the immediate change to a scroll wheel value.</summary>
+        </member>
         <member name="M:StardewModdingAPI.IInputHelper.SuppressActiveKeybinds(StardewModdingAPI.Utilities.KeybindList)">
             <summary>Suppress the keybinds which are currently down.</summary>
             <param name="keybindList">The keybind list whose active keybinds to suppress.</param>
@@ -9156,6 +9442,13 @@
         </member>
         <member name="T:StardewModdingAPI.IModContentHelper">
             <summary>Provides an API for loading content assets from the current mod's folder.</summary>
+        </member>
+        <member name="M:StardewModdingAPI.IModContentHelper.DoesAssetExist``1(System.String)">
+            <summary>Get whether a file within the mod folder exists.</summary>
+            <typeparam name="T">The expected asset type.</typeparam>
+            <param name="relativePath">The local path to a content file relative to the mod folder.</param>
+            <exception cref="T:System.ArgumentException">The <paramref name="relativePath"/> is empty or contains invalid characters.</exception>
+            <exception cref="T:Microsoft.Xna.Framework.Content.ContentLoadException">The content asset couldn't be loaded (e.g. because it doesn't exist).</exception>
         </member>
         <member name="M:StardewModdingAPI.IModContentHelper.Load``1(System.String)">
             <summary>Load content from the mod folder and return it. When loading a <c>.png</c> file, this must be called outside the game's draw loop.</summary>
@@ -9748,7 +10041,7 @@
             <remarks>This must be checked *before* any references to <see cref="T:StardewModdingAPI.Constants"/>, and this method should not reference <see cref="T:StardewModdingAPI.Constants"/> itself to avoid errors in Mono or when the game isn't present.</remarks>
         </member>
         <member name="M:StardewModdingAPI.Program.AssertGameVersion">
-            <summary>Assert that the game version is within <see cref="P:StardewModdingAPI.Constants.MinimumGameVersion"/> and <see cref="P:StardewModdingAPI.Constants.MaximumGameVersion"/>.</summary>
+            <summary>Assert that the game version is within <see cref="P:StardewModdingAPI.Constants.MinimumGameVersion"/>, <see cref="P:StardewModdingAPI.Constants.MinimumGameBuild"/>, and <see cref="P:StardewModdingAPI.Constants.MaximumGameVersion"/>.</summary>
         </member>
         <member name="M:StardewModdingAPI.Program.AssertSmapiVersions">
             <summary>Assert that the versions of all SMAPI components are correct.</summary>
@@ -10518,14 +10811,33 @@
         <member name="F:StardewModdingAPI.Translation.PlaceholderText">
             <summary>The placeholder text when the translation is <c>null</c> or empty, where <c>{0}</c> is the translation key.</summary>
         </member>
+        <member name="P:StardewModdingAPI.Translation.ForceGender">
+            <summary>The gender to use for gender switch blocks.</summary>
+            <remarks>This enables formatting translations in unit tests; most code should leave this null to get it from <see cref="P:StardewValley.Game1.player"/> instead.</remarks>
+        </member>
         <member name="F:StardewModdingAPI.Translation.Locale">
             <summary>The locale for which the translation was fetched like <c>fr-FR</c>, or an empty string for English.</summary>
         </member>
         <member name="F:StardewModdingAPI.Translation.Text">
             <summary>The underlying translation text.</summary>
         </member>
-        <member name="F:StardewModdingAPI.Translation.Placeholder">
-            <summary>The value to return if the translations is undefined.</summary>
+        <member name="P:StardewModdingAPI.Translation.CustomDefault">
+            <summary>The custom value to return if the translations is undefined.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Translation.ShouldUsePlaceholder">
+            <summary>Whether to show a placeholder if the <see cref="F:StardewModdingAPI.Translation.Text"/> and <see cref="P:StardewModdingAPI.Translation.CustomDefault"/> are both is <c>null</c> or empty.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Translation.ShouldApplyGenderSwitchBlocks">
+            <summary>Whether to process gender-switch blocks in translation text, if any.</summary>
+        </member>
+        <member name="P:StardewModdingAPI.Translation.TokenValues">
+            <summary>The tokens to apply to the translation text, if any.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Translation.Cached">
+            <summary>Whether the <see cref="F:StardewModdingAPI.Translation.CachedResult"/> has been prepared.</summary>
+        </member>
+        <member name="F:StardewModdingAPI.Translation.CachedResult">
+            <summary>The final output text, it's already been prepared.</summary>
         </member>
         <member name="P:StardewModdingAPI.Translation.Key">
             <summary>The original translation key.</summary>
@@ -10536,37 +10848,51 @@
             <param name="key">The translation key.</param>
             <param name="text">The underlying translation text.</param>
         </member>
+        <member name="M:StardewModdingAPI.Translation.#ctor(StardewModdingAPI.Translation)">
+            <summary>Construct an instance.</summary>
+            <param name="other">The other translation to copy.</param>
+        </member>
         <member name="M:StardewModdingAPI.Translation.Default(System.String)">
-            <summary>Replace the text if it's <c>null</c> or empty. If you set a <c>null</c> or empty value, the translation will show the fallback "no translation" placeholder (see <see cref="M:StardewModdingAPI.Translation.UsePlaceholder(System.Boolean)"/> if you want to disable that). Returns a new instance if changed.</summary>
+            <summary>The custom text to use if the text is <c>null</c> or empty. If set to <c>null</c> or empty value, defaults to a fallback "no translation" placeholder unless you disable that via <see cref="M:StardewModdingAPI.Translation.UsePlaceholder(System.Boolean)"/>.</summary>
             <param name="default">The default value.</param>
+            <remarks>Returns a new instance if this would change the result, else the current instance.</remarks>
         </member>
         <member name="M:StardewModdingAPI.Translation.UsePlaceholder(System.Boolean)">
-            <summary>Whether to return a "no translation" placeholder if the translation is <c>null</c> or empty. Returns a new instance.</summary>
+            <summary>Whether to return a "no translation" placeholder if the translation is <c>null</c> or empty.</summary>
             <param name="use">Whether to return a placeholder. <strong>Due to limitations with nullable reference types, setting this to <c>false</c> will still mark the text non-nullable.</strong></param>
+            <remarks>Returns a new instance if this would change the result, else the current instance.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Translation.ApplyGenderSwitchBlocks(System.Boolean)">
+            <summary>Whether to automatically process gender-switch blocks (i.e. <see cref="M:StardewValley.Dialogue.applyGenderSwitchBlocks(StardewValley.Gender,System.String)"/>) before the text is returned.</summary>
+            <param name="apply">Whether to process gender-switch blocks.</param>
+            <remarks>Returns a new instance if this would change the result, else the current instance.</remarks>
         </member>
         <member name="M:StardewModdingAPI.Translation.Tokens(System.Object)">
-            <summary>Replace tokens in the text like <c>{{value}}</c> with the given values. Returns a new instance.</summary>
+            <summary>Replace tokens in the text like <c>{{value}}</c> with the given values.</summary>
             <param name="tokens">An object containing token key/value pairs. This can be an anonymous object (like <c>new { value = 42, name = "Cranberries" }</c>), a dictionary, or a class instance.</param>
             <exception cref="T:System.ArgumentNullException">The <paramref name="tokens"/> argument is <c>null</c>.</exception>
+            <remarks>Returns a new instance if this would change the result, else the current instance.</remarks>
         </member>
         <member name="M:StardewModdingAPI.Translation.HasValue">
-            <summary>Get whether the translation has a defined value.</summary>
+            <summary>Get whether the translation has a defined value, before tokens are replaced.</summary>
         </member>
         <member name="M:StardewModdingAPI.Translation.ToString">
             <summary>Get the translation text. Calling this method isn't strictly necessary, since you can assign a <see cref="T:StardewModdingAPI.Translation"/> value directly to a string.</summary>
-            <remarks><strong>Limitation with nullable reference types: if there's no text and you disabled the fallback via <see cref="M:StardewModdingAPI.Translation.UsePlaceholder(System.Boolean)"/>, this will return null but the return value will still be marked non-nullable.</strong></remarks>
+            <remarks><strong>Limitation with nullable reference types: if there's no text, no <see cref="M:StardewModdingAPI.Translation.Default(System.String)"/>, and you disabled the fallback via <see cref="M:StardewModdingAPI.Translation.UsePlaceholder(System.Boolean)"/>, this will return null but the return value will still be marked non-nullable.</strong></remarks>
         </member>
         <member name="M:StardewModdingAPI.Translation.op_Implicit(StardewModdingAPI.Translation)~System.String">
             <summary>Get a string representation of the given translation.</summary>
             <param name="translation">The translation key.</param>
             <remarks><strong>Limitation with nullable reference types: if there's no text and you disabled the fallback via <see cref="M:StardewModdingAPI.Translation.UsePlaceholder(System.Boolean)"/>, this will return null but the return value will still be marked non-nullable.</strong></remarks>
         </member>
-        <member name="M:StardewModdingAPI.Translation.#ctor(System.String,System.String,System.String,System.String)">
-            <summary>Construct an instance.</summary>
-            <param name="locale">The locale for which the translation was fetched.</param>
-            <param name="key">The translation key.</param>
-            <param name="text">The underlying translation text.</param>
-            <param name="placeholder">The value to return if the translations is undefined.</param>
+        <member name="M:StardewModdingAPI.Translation.FormatText(System.String)">
+            <summary>Apply any formatting or tokens to the given text.</summary>
+            <param name="text">The text to format.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Translation.GetTokenValues(System.Object)">
+            <summary>Get token values to apply from a given token source, if any.</summary>
+            <param name="source">An object containing token key/value pairs. This can be an anonymous object (like <c>new { value = 42, name = "Cranberries" }</c>), a dictionary, or a class instance.</param>
+            <returns>Returns the token values, or <c>null</c> if there were none.</returns>
         </member>
         <member name="T:StardewModdingAPI.Utilities.AssetPathUtilities.AssetNamePartEnumerator">
             <summary>Handles enumerating the normalized segments in an asset name.</summary>
@@ -10792,9 +11118,17 @@
             <param name="path">The file path to normalize.</param>
             <remarks>This should only be used for file paths. For asset names, use <see cref="M:StardewModdingAPI.Utilities.PathUtilities.NormalizeAssetName(System.String)"/> instead.</remarks>
         </member>
+        <member name="M:StardewModdingAPI.Utilities.PathUtilities.AnonymizePathForDisplay(System.String)">
+            <summary>Get a path with the home directory path replaced with <c>~</c> (like <c>C:\Users\Admin\Game</c> to <c>~\Game</c>), if applicable.</summary>
+            <param name="path">The path to anonymize.</param>
+        </member>
         <member name="M:StardewModdingAPI.Utilities.PathUtilities.IsSafeRelativePath(System.String)">
             <summary>Get whether a path is relative and doesn't try to climb out of its containing folder (e.g. doesn't contain <c>../</c>).</summary>
             <param name="path">The path to check.</param>
+        </member>
+        <member name="M:StardewModdingAPI.Utilities.PathUtilities.CreateSlug(System.String)">
+            <summary>Create a 'slug' containing only basic characters that are safe in all contexts (e.g. filenames, URLs, etc).</summary>
+            <param name="input">The string to represent.</param>
         </member>
         <member name="M:StardewModdingAPI.Utilities.PathUtilities.IsSlug(System.String)">
             <summary>Get whether a string is a valid 'slug', containing only basic characters that are safe in all contexts (e.g. filenames, URLs, etc).</summary>
