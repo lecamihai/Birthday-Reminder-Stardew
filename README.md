@@ -4,10 +4,6 @@
 
 **Birthday Reminder** is a simple stardew valley mod that gives a pop-up message at the start of the day of an npc birthday showing what the villager loves as gifts.
 
-[![CurseForge](https://img.shields.io/badge/CurseForge-Birthday%20Reminder-orange)](https://www.curseforge.com/stardewvalley/mods/birthday-reminder)  
-
-**Downloads**
-
-![CurseForge](https://cf.way2muchnoise.eu/1108150.svg)
+[![CurseForge](https://cf.way2muchnoise.eu/title/1108150.svg)](https://www.curseforge.com/stardewvalley/mods/birthday-reminder)  [![CurseForge](https://cf.way2muchnoise.eu/1108150.svg)](https://www.curseforge.com/stardewvalley/mods/birthday-reminder)
 
 [Download on CurseForge](https://www.curseforge.com/stardewvalley/mods/birthday-reminder)
