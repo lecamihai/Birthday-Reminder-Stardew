@@ -12,15 +12,15 @@ namespace BirthdayReminderMod
                 // Spring
                 { "Kent", new NPCInfo("Kent", "spring 4", new List<string> { "607", "649" }) },
                 { "Lewis", new NPCInfo("Lewis", "spring 7", new List<string> { "200", "208", "235", "614", "260" }) },
-                { "Vincent", new NPCInfo("Vincent", "spring 10", new List<string> { "221", "398", "612", "721", "903", "FrogEgg" }) },
+                { "Vincent", new NPCInfo("Vincent", "spring 10", new List<string> { "221", "398", "612", "721", "903"}) },
                 { "Haley", new NPCInfo("Haley", "spring 14", new List<string> { "221", "421", "610", "88" }) },
                 { "Pam", new NPCInfo("Pam", "spring 18", new List<string> { "24", "90", "199", "208", "303", "346", "459", "873" }) },
                 { "Shane", new NPCInfo("Shane", "spring 20", new List<string> { "206", "215", "260", "346" }) },
                 { "Pierre", new NPCInfo("Pierre", "spring 26", new List<string> { "202", "Book_PriceCatalogue" }) },
-                { "Emily", new NPCInfo("Emily", "spring 27", new List<string> { "60", "62", "64", "66", "68", "70", "241", "428", "440", "ParrotEgg" }) },
+                { "Emily", new NPCInfo("Emily", "spring 27", new List<string> { "60", "62", "64", "66", "68", "70", "241", "428", "440"}) },
 
                 // Summer
-                { "Jas", new NPCInfo("Jas", "summer 4", new List<string> { "221", "595", "604", "doll_item", "toy_item", "FairyBox" }) },
+                { "Jas", new NPCInfo("Jas", "summer 4", new List<string> { "221", "595", "604", "103" }) },
                 { "Gus", new NPCInfo("Gus", "summer 8", new List<string> { "72", "213", "635", "729", "907" }) },
                 { "Maru", new NPCInfo("Maru", "summer 10", new List<string> { "72", "197", "190", "215", "222", "243", "336", "337", "400", "787", "910", "122" }) },
                 { "Alex", new NPCInfo("Alex", "summer 13", new List<string> { "201", "212", "Book_Defense" }) },
