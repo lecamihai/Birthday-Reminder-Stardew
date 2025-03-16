@@ -19,5 +19,8 @@
     <Reference Include="xTile">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\xTile.dll</HintPath>
     </Reference>
+    <Reference Include="Gamedata">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\StardewValley.GameData.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

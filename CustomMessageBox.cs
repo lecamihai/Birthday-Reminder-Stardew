@@ -1,4 +1,3 @@
-//CustomMessageBox.cs
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -6,6 +5,7 @@ using StardewValley;
 using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
+using StardewValley.GameData.Objects; // Add this namespace for object data
 
 namespace BirthdayReminderMod
 {
@@ -34,7 +34,7 @@ namespace BirthdayReminderMod
         private readonly int heartSpacing = 4;
 
         // Offsets for sprite and hearts
-        private readonly int spriteYOffset = -30;
+        private readonly int spriteYOffset = -10;
         private readonly int heartXOffset = 20;
         private readonly int heartYOffset = 10;
 
@@ -86,7 +86,8 @@ namespace BirthdayReminderMod
             float giftsWidth = 0f;
             foreach (var gift in lovedGifts)
             {
-                float giftWidth = Game1.smallFont.MeasureString(gift).X + iconSize + iconSpacing;
+                string giftName = GetItemName(gift);
+                float giftWidth = Game1.smallFont.MeasureString(giftName).X + iconSize + iconSpacing;
                 if (giftWidth > giftsWidth)
                     giftsWidth = giftWidth;
             }
@@ -169,16 +170,27 @@ namespace BirthdayReminderMod
 
         private float DrawNPCSpriteAndHearts(SpriteBatch b, float textStartX, float currentY)
         {
-            int spriteWidth = (int)(npc.Sprite.SourceRect.Width * spriteScale);
-            int spriteHeight = (int)(npc.Sprite.SourceRect.Height * spriteScale);
+            if (npcSprite == null || npc == null)
+                return currentY;
+
+            int spriteWidth = npc.Sprite.SpriteWidth;
+            int spriteHeight = npc.Sprite.SpriteHeight;
+
+            // Force front-facing frame (down direction, first frame)
+            int baseFrame = 0;
+            int sheetColumns = npcSprite.Width / spriteWidth;
+            int sourceX = (baseFrame % sheetColumns) * spriteWidth;
+            int sourceY = (baseFrame / sheetColumns) * spriteHeight;
+            Rectangle sourceRect = new Rectangle(sourceX, sourceY, spriteWidth, spriteHeight);
+
+            // Draw NPC sprite
             int spriteX = (int)textStartX;
             int spriteY = (int)(currentY + spriteYOffset);
 
-            // Draw NPC sprite
             b.Draw(
                 npcSprite,
                 new Vector2(spriteX, spriteY),
-                npc.Sprite.SourceRect,
+                sourceRect,
                 Color.White,
                 0f,
                 Vector2.Zero,
@@ -188,9 +200,9 @@ namespace BirthdayReminderMod
             );
 
             // Draw hearts
-            DrawHearts(b, spriteX + spriteWidth + heartSpacing + heartXOffset, spriteY + (spriteHeight / 2), Game1.player.getFriendshipHeartLevelForNPC(npc.Name));
+            DrawHearts(b, spriteX + (int)(spriteWidth * spriteScale) + heartXOffset, spriteY + (int)(spriteHeight * spriteScale / 2), Game1.player.getFriendshipHeartLevelForNPC(npc.Name));
 
-            return spriteY + spriteHeight + paddingBetween;
+            return currentY + (int)(spriteHeight * spriteScale) + paddingBetween;
         }
 
         private void DrawHearts(SpriteBatch b, int startX, int centerY, int affectionLevel)
@@ -231,8 +243,9 @@ namespace BirthdayReminderMod
         {
             for (int i = 0; i < lovedGifts.Count; i++)
             {
-                string giftName = lovedGifts[i];
-                int itemId = GetItemId(giftName);
+                string giftId = lovedGifts[i];
+                string giftName = GetItemName(giftId);
+                int itemId = GetItemId(giftId);
                 int yPosition = (int)(textStartY + i * (lineHeight + iconSpacing));
                 float currentX = textStartX;
 
@@ -251,15 +264,47 @@ namespace BirthdayReminderMod
             }
         }
 
-        private int GetItemId(string itemName)
+        private int GetItemId(string itemId)
         {
-            if (Constants.ItemNameToIdMap.TryGetValue(itemName, out int id))
+            if (int.TryParse(itemId, out int id))
             {
                 return id;
             }
-
-            this.monitor.Log($"Item ID for '{itemName}' not found.", LogLevel.Warn);
             return -1;
+        }
+
+        private string GetItemName(string itemId)
+        {
+            // Fetch the item data from the game's object data using the item ID as a string
+            if (Game1.objectData.TryGetValue(itemId, out ObjectData objectData))
+            {
+                // Check if the DisplayName is a localization key
+                string displayName = objectData.DisplayName;
+                if (displayName.StartsWith("[") && displayName.Contains("]"))
+                {
+                    // Extract the localization key
+                    string localizationKey = displayName.TrimStart('[').Split(']')[0];
+
+                    // Fix the key format to match the expected format
+                    // Example: "[LocalizedText Strings\Objects:HotPepper_Name]" -> "Strings\\Objects:HotPepper_Name"
+                    localizationKey = localizationKey.Replace("LocalizedText Strings\\", "Strings\\");
+
+                    try
+                    {
+                        // Get the localized name using the key
+                        return Game1.content.LoadString(localizationKey);
+                    }
+                    catch (Exception ex)
+                    {
+                        this.monitor.Log($"Failed to load localized name for key '{localizationKey}': {ex.Message}", LogLevel.Warn);
+                        return displayName; // Fallback to the raw DisplayName
+                    }
+                }
+
+                // If it's not a localization key, return the DisplayName as-is
+                return displayName;
+            }
+            return "Unknown Item";
         }
     }
 }
