@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "gU1K/bu2vMg=",
+  "dgSpecHash": "gr3FqlUsF4k9LZooBoysBztEwg+tMRd1InjZWmyeW9INsRcAHFmAZEJ4/3wY1OXzkTKPENP3u8U9gPVIVBkBaQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Mihai\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
+  "projectFilePath": "C:\\Users\\Brn\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Mihai\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.3\\microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
-    "C:\\Users\\Mihai\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net45\\1.0.3\\microsoft.netframework.referenceassemblies.net45.1.0.3.nupkg.sha512"
+    "C:\\Users\\Brn\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.2\\microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
+    "C:\\Users\\Brn\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net45\\1.0.2\\microsoft.netframework.referenceassemblies.net45.1.0.2.nupkg.sha512"
   ],
   "logs": []
 }

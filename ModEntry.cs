@@ -1,4 +1,5 @@
-﻿using StardewModdingAPI;
+﻿//ModEntry.cs
+using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using System;

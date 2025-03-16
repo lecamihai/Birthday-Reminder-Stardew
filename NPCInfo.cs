@@ -1,3 +1,4 @@
+// NPCInfo.cs
 using System.Collections.Generic;
 
 namespace BirthdayReminderMod

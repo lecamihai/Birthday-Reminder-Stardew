@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mihai\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj": {}
+    "C:\\Users\\Brn\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mihai\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj": {
+    "C:\\Users\\Brn\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mihai\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
+        "projectUniqueName": "C:\\Users\\Brn\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
         "projectName": "BirthdayReminderMod",
-        "projectPath": "C:\\Users\\Mihai\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
-        "packagesPath": "C:\\Users\\Mihai\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mihai\\Birthday-Reminder-Stardew\\obj\\",
+        "projectPath": "C:\\Users\\Brn\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
+        "packagesPath": "C:\\Users\\Brn\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Brn\\Birthday-Reminder-Stardew\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Mihai\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Brn\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net45"
@@ -32,11 +32,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -46,11 +41,11 @@
             "Microsoft.NETFramework.ReferenceAssemblies": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[1.0.3, )",
+              "version": "[1.0.2, )",
               "autoReferenced": true
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.428\\RuntimeIdentifierGraph.json"
         }
       }
     }

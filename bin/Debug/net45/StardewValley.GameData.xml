@@ -229,6 +229,9 @@
         <member name="F:StardewValley.GameData.Buildings.BuildingData.Name">
             <summary>A tokenizable string for the display name (e.g. shown in the construction menu).</summary>
         </member>
+        <member name="F:StardewValley.GameData.Buildings.BuildingData.NameForGeneralType">
+            <summary>If set, a tokenizable string for the display name which represents the general building type, like 'Coop' for a Deluxe Coop. If omitted, this defaults to the <see cref="F:StardewValley.GameData.Buildings.BuildingData.Name"/>.</summary>
+        </member>
         <member name="F:StardewValley.GameData.Buildings.BuildingData.Description">
             <summary>A tokenizable string for the description (e.g. shown in the construction menu).</summary>
         </member>
@@ -518,6 +521,9 @@
         </member>
         <member name="F:StardewValley.GameData.Buildings.BuildingSkin.Name">
             <summary>A tokenizable string for the skin's translated name.</summary>
+        </member>
+        <member name="F:StardewValley.GameData.Buildings.BuildingSkin.NameForGeneralType">
+            <summary>If set, a tokenizable string for the skin's display name which represents the general building type, like 'Coop' for a Deluxe Coop. If omitted, this defaults to the <see cref="F:StardewValley.GameData.Buildings.BuildingSkin.Name"/>.</summary>
         </member>
         <member name="F:StardewValley.GameData.Buildings.BuildingSkin.Description">
             <summary>A tokenizable string for the skin's translated description.</summary>
@@ -1128,7 +1134,7 @@
             <summary>How produced items are collected from the animal.</summary>
         </member>
         <member name="F:StardewValley.GameData.FarmAnimals.FarmAnimalData.HarvestTool">
-            <summary>The tool ID with which produced items can be collected from the animal, if the <see cref="F:StardewValley.GameData.FarmAnimals.FarmAnimalData.HarvestType"/> is set to <see cref="F:StardewValley.GameData.FarmAnimals.FarmAnimalHarvestType.HarvestWithTool"/>. The values recognized by the vanilla tools are <c>MilkPail</c> and <c>Shears</c>. Default none.</summary>
+            <summary>The tool name with which produced items can be collected from the animal, if the <see cref="F:StardewValley.GameData.FarmAnimals.FarmAnimalData.HarvestType"/> is set to <see cref="F:StardewValley.GameData.FarmAnimals.FarmAnimalHarvestType.HarvestWithTool"/>. The values recognized by the vanilla tools are <c>Milk Pail</c> and <c>Shears</c>. Default none.</summary>
         </member>
         <member name="F:StardewValley.GameData.FarmAnimals.FarmAnimalData.ProduceItemIds">
             <summary>The items produced by the animal when it's an adult, if <see cref="F:StardewValley.GameData.FarmAnimals.FarmAnimalData.DeluxeProduceMinimumFriendship"/> does not match.</summary>
@@ -1402,9 +1408,18 @@
         </member>
         <member name="F:StardewValley.GameData.FishPonds.FishPondData.MaxPopulation">
             <summary>The maximum number of fish which can be added to this pond.</summary>
+            <remarks>This cannot exceed the global maximum of 10.</remarks>
         </member>
         <member name="F:StardewValley.GameData.FishPonds.FishPondData.SpawnTime">
             <summary>The number of days needed to raise the population by one if there's enough room in the fish pond, or <c>-1</c> to choose a number automatically based on the fish value.</summary>
+        </member>
+        <member name="F:StardewValley.GameData.FishPonds.FishPondData.BaseMinProduceChance">
+            <summary>The minimum daily chance that this fish pond checks for output on a given day, as a value between 0 (never) and 1 (always).</summary>
+            <remarks>The actual probability is lerped between <see cref="F:StardewValley.GameData.FishPonds.FishPondData.BaseMinProduceChance"/> and <see cref="F:StardewValley.GameData.FishPonds.FishPondData.BaseMaxProduceChance"/> based on the fish pond's population. If the min chance is 95+%, it's treated as the actual probability without lerping. If this check passes, output is only produced if one of the <see cref="F:StardewValley.GameData.FishPonds.FishPondData.ProducedItems"/> passes its checks too.</remarks>
+        </member>
+        <member name="F:StardewValley.GameData.FishPonds.FishPondData.BaseMaxProduceChance">
+            <summary>The maximum daily chance that this fish pond checks for output on a given day, as a value between 0 (never) and 1 (always).</summary>
+            <inheritdoc cref="F:StardewValley.GameData.FishPonds.FishPondData.BaseMinProduceChance" path="/remarks" />
         </member>
         <member name="F:StardewValley.GameData.FishPonds.FishPondData.WaterColor">
             <summary>The custom water color to set, if applicable.</summary>
@@ -1425,7 +1440,10 @@
             <summary>The minimum population needed before this output becomes available.</summary>
         </member>
         <member name="F:StardewValley.GameData.FishPonds.FishPondReward.Chance">
-            <summary>The percentage chance that this output is selected, as a value between 0 (never) and 1 (always).If multiple items pass, only the first one will be produced.</summary>
+            <summary>The percentage chance that this output is selected, as a value between 0 (never) and 1 (always). If multiple items pass, only the first one will be produced.</summary>
+        </member>
+        <member name="F:StardewValley.GameData.FishPonds.FishPondReward.Precedence">
+            <summary>The order in which this entry should be checked, where 0 is the default value used by most entries. Entries with the same precedence are checked in the order listed.</summary>
         </member>
         <member name="P:StardewValley.GameData.FishPonds.FishPondReward.MinQuantity">
             <summary>Obsolete; use <see cref="P:StardewValley.GameData.GenericSpawnItemData.MinStack" /> instead.</summary>
@@ -2656,6 +2674,33 @@
         <member name="F:StardewValley.GameData.MakeoverOutfits.MakeoverOutfit.Gender">
             <summary>The player gender for which the outfit applies, or <c>null</c> for any gender.</summary>
         </member>
+        <member name="T:StardewValley.GameData.MannequinData">
+            <summary>The metadata for a mannequin which can be placed in the world and used to store and display clothing.</summary>
+        </member>
+        <member name="F:StardewValley.GameData.MannequinData.DisplayName">
+            <summary>A tokenizable string for the item's translated display name.</summary>
+        </member>
+        <member name="F:StardewValley.GameData.MannequinData.Description">
+            <summary>A tokenizable string for the item's translated description.</summary>
+        </member>
+        <member name="F:StardewValley.GameData.MannequinData.Texture">
+            <summary>The asset name for the texture containing the item sprite, or <c>null</c> for <c>TileSheets/Mannequins</c>.</summary>
+        </member>
+        <member name="F:StardewValley.GameData.MannequinData.FarmerTexture">
+            <summary>The asset name for the texture containing the placed world sprite.</summary>
+        </member>
+        <member name="F:StardewValley.GameData.MannequinData.SheetIndex">
+            <summary>The sprite's index in the <see cref="F:StardewValley.GameData.MannequinData.Texture"/> spritesheet.</summary>
+        </member>
+        <member name="F:StardewValley.GameData.MannequinData.DisplaysClothingAsMale">
+            <summary>For clothing with gender variants, whether to display the male (true) or female (false) variant.</summary>
+        </member>
+        <member name="F:StardewValley.GameData.MannequinData.Cursed">
+            <summary>Whether to enable rare Easter egg 'cursed' behavior.</summary>
+        </member>
+        <member name="F:StardewValley.GameData.MannequinData.CustomFields">
+            <summary>Custom fields ignored by the base game, for use by mods.</summary>
+        </member>
         <member name="T:StardewValley.GameData.Minecarts.MinecartDestinationData">
             <summary>As part of <see cref="T:StardewValley.GameData.Minecarts.MinecartNetworkData"/>, a minecart destination which can be used by players.</summary>
         </member>
@@ -3658,7 +3703,7 @@
             <summary>Custom fields ignored by the base game, for use by mods.</summary>
         </member>
         <member name="T:StardewValley.GameData.QuantityModifier">
-            <summary>As part of an another entry like <see cref="T:StardewValley.GameData.Machines.MachineData"/> or <see cref="T:StardewValley.GameData.Shops.ShopData"/>, a change to apply to a numeric quantity.</summary>
+            <summary>As part of another entry like <see cref="T:StardewValley.GameData.Machines.MachineData"/> or <see cref="T:StardewValley.GameData.Shops.ShopData"/>, a change to apply to a numeric quantity.</summary>
         </member>
         <member name="F:StardewValley.GameData.QuantityModifier.Id">
             <summary>An ID for this modifier. This only needs to be unique within the current modifier list. For a custom entry, you should use a globally unique ID which includes your mod ID like <c>ExampleMod.Id_ModifierName</c>.</summary>
@@ -4343,9 +4388,6 @@
         </member>
         <member name="T:StardewValley.GameData.TrinketData">
             <summary>The data for a trinket item.</summary>
-        </member>
-        <member name="F:StardewValley.GameData.TrinketData.Id">
-            <summary>A unique string ID for this trinket.</summary>
         </member>
         <member name="F:StardewValley.GameData.TrinketData.DisplayName">
             <summary>A tokenizable string for the item display name.</summary>

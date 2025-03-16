@@ -6350,8 +6350,12 @@
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.BellsAndWhistles.SpriteText"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
-        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.StatsFacade">
+        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.StatsFacade_160">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Stats"/> methods to their newer form to avoid breaking older mods.</summary>
+            <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.StatsFacade_1615">
+            <summary>Maps Stardew Valley 1.6.14's <see cref="T:StardewValley.Stats"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
         </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.StorageFurnitureFacade">
@@ -6381,6 +6385,9 @@
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.UtilityFacade">
             <summary>Maps Stardew Valley 1.5.6's <see cref="T:StardewValley.Utility"/> methods to their newer form to avoid breaking older mods.</summary>
             <remarks>This is public to support SMAPI rewriting and should never be referenced directly by mods. See remarks on <see cref="T:StardewModdingAPI.Framework.ModLoading.Rewriters.ReplaceReferencesRewriter"/> for more info.</remarks>
+        </member>
+        <member name="M:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.UtilityFacade.checkForBooksReadAchievement">
+            <remarks>Replaced in Stardew Valley 1.6.15.</remarks>
         </member>
         <member name="T:StardewModdingAPI.Framework.ModLoading.Rewriters.StardewValley_1_6.ViewportExtensionsFacade">
             <summary>Maps Stardew Valley 1.5.6's <c>ViewportExtensions</c> methods to their newer form to avoid breaking older mods.</summary>
@@ -7355,9 +7362,9 @@
             <summary>Get a file lookup for the given directory.</summary>
             <param name="rootDirectory">The root path to scan.</param>
         </member>
-        <member name="M:StardewModdingAPI.Framework.SCore.GetMapDisplayDevice">
+        <member name="M:StardewModdingAPI.Framework.SCore.GetMapDisplayDevice_OBSOLETE">
             <summary>Get the map display device which applies SMAPI features like tile rotation to loaded maps.</summary>
-            <remarks>This is separate to let mods like PyTK wrap it with their own functionality.</remarks>
+            <remarks>This only exists for backwards compatibility with Stardew Valley 1.6.14, and will be removed in the next SMAPI update. See <see cref="M:StardewModdingAPI.Framework.SGame.CreateDisplayDevice(Microsoft.Xna.Framework.Content.ContentManager,Microsoft.Xna.Framework.Graphics.GraphicsDevice)"/> instead.</remarks>
         </member>
         <member name="M:StardewModdingAPI.Framework.SCore.GetLogPath">
             <summary>Get the absolute path to the next available log file.</summary>
@@ -7577,9 +7584,10 @@
             <inheritdoc />
         </member>
         <member name="M:StardewModdingAPI.Framework.SGame.CreateContentManager(System.IServiceProvider,System.String)">
-            <summary>Construct a content manager to read game content files.</summary>
-            <param name="serviceProvider">The service provider to use to locate services.</param>
-            <param name="rootDirectory">The root directory to search for content.</param>
+            <inheritdoc />
+        </member>
+        <member name="M:StardewModdingAPI.Framework.SGame.CreateDisplayDevice(Microsoft.Xna.Framework.Content.ContentManager,Microsoft.Xna.Framework.Graphics.GraphicsDevice)">
+            <inheritdoc />
         </member>
         <member name="M:StardewModdingAPI.Framework.SGame.Initialize">
             <summary>Initialize the instance when the game starts.</summary>

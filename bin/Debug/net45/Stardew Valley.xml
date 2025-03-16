@@ -6089,6 +6089,16 @@
             and initialize them as well.
             </summary>
         </member>
+        <member name="M:StardewValley.Game1.CreateContentManager(System.IServiceProvider,System.String)">
+            <summary>Construct a content manager to read game content files.</summary>
+            <param name="serviceProvider">The service provider to use to locate services.</param>
+            <param name="rootDirectory">The root directory to search for content.</param>
+        </member>
+        <member name="M:StardewValley.Game1.CreateDisplayDevice(Microsoft.Xna.Framework.Content.ContentManager,Microsoft.Xna.Framework.Graphics.GraphicsDevice)">
+            <summary>Create an xTile map display device.</summary>
+            <param name="content">The content manager through which it should load tilesheet textures.</param>
+            <param name="graphicsDevice">The XNA graphics device.</param>
+        </member>
         <member name="M:StardewValley.Game1.LoadContent">
             <summary>LoadContent will be called once per game and is the place to load all of your content.</summary>
         </member>
@@ -6376,6 +6386,17 @@
         </member>
         <member name="M:StardewValley.Game1.GetFarmTypeKey">
             <summary>Get the human-readable identifier for the current farm type. For a custom farm type, this is equivalent to <see cref="M:StardewValley.Game1.GetFarmTypeID"/>.</summary>
+        </member>
+        <member name="M:StardewValley.Game1.ResetGameStateOnTitleScreen">
+            <summary>Reset most game state when returning to the title screen from a title sub-menu.</summary>
+            <remarks>
+              <para>This is specialized code that normally shouldn't be called directly. This differs from <see cref="M:StardewValley.Game1.CleanupReturningToTitle" /> in that it doesn't exit split screens, reset the title menu, or reset the game window.</para>
+              <para>This is called automatically from <see cref="M:StardewValley.Game1.CleanupReturningToTitle" />.</para>
+            </remarks>
+        </member>
+        <member name="M:StardewValley.Game1.CleanupReturningToTitle">
+            <summary>Reset all game state when returning to the title screen from a loaded save.</summary>
+            <remarks>This is specialized code that should normally not be called directly. See also <see cref="M:StardewValley.Game1.ResetGameStateOnTitleScreen" />.</remarks>
         </member>
         <member name="M:StardewValley.Game1.GetScreenshotFolder(System.Boolean)">
             <summary>Get the absolute path to the folder containing screenshots.</summary>
@@ -8166,7 +8187,7 @@
             <summary>The type identifier for items provided by <see cref="T:StardewValley.ItemTypeDefinitions.HatDataDefinition"/>.</summary>
         </member>
         <member name="F:StardewValley.ItemRegistry.type_mannequin">
-            <summary>The type identifier for items provided by <see cref="!:MannequinDataDefintion"/>.</summary>
+            <summary>The type identifier for items provided by <see cref="T:StardewValley.ItemTypeDefinitions.MannequinDataDefinition"/>.</summary>
         </member>
         <member name="F:StardewValley.ItemRegistry.type_pants">
             <summary>The type identifier for items provided by <see cref="T:StardewValley.ItemTypeDefinitions.PantsDataDefinition"/>.</summary>
@@ -9190,6 +9211,7 @@
             <param name="lightMultiplier">A multiplier to apply to the light strength (e.g. for the darkness debuff).</param>
         </member>
         <member name="T:StardewValley.LocalizedContentManager">
+            <summary>Loads assets and translations from the game's content folder.</summary>
             <summary>Loads assets and translations from the game's content folder.</summary>
         </member>
         <member name="F:StardewValley.LocalizedContentManager._CachedContentRoot">
@@ -11631,8 +11653,14 @@
         <member name="P:StardewValley.Menus.CarpenterMenu.BlueprintEntry.DisplayName">
             <summary>The translated display name.</summary>
         </member>
+        <member name="P:StardewValley.Menus.CarpenterMenu.BlueprintEntry.DisplayNameForGeneralType">
+            <summary>The translated display name for the general building type, like 'Coop' for a Deluxe Coop.</summary>
+        </member>
         <member name="P:StardewValley.Menus.CarpenterMenu.BlueprintEntry.TokenizedDisplayName">
-            <summary>The translated display name as a <see cref="T:StardewValley.TokenizableStrings.TokenParser">tokenizable string</see>.</summary>
+            <summary>The <see cref="P:StardewValley.Menus.CarpenterMenu.BlueprintEntry.DisplayName"/> as a <see cref="T:StardewValley.TokenizableStrings.TokenParser">tokenizable string</see>.</summary>
+        </member>
+        <member name="P:StardewValley.Menus.CarpenterMenu.BlueprintEntry.TokenizedDisplayNameForGeneralType">
+            <summary>The <see cref="P:StardewValley.Menus.CarpenterMenu.BlueprintEntry.DisplayNameForGeneralType"/> as a <see cref="T:StardewValley.TokenizableStrings.TokenParser">tokenizable string</see>.</summary>
         </member>
         <member name="P:StardewValley.Menus.CarpenterMenu.BlueprintEntry.Description">
             <summary>The translated description.</summary>
@@ -12436,6 +12464,9 @@
         <member name="M:StardewValley.Menus.ItemGrabMenu.RepositionSideButtons">
             <summary>Position the buttons that appear on the right side of the screen (e.g. to organize or fill stacks), and update their neighbor IDs.</summary>
         </member>
+        <member name="M:StardewValley.Menus.ItemGrabMenu.CanHaveColorPicker">
+            <summary>Get whether the chest can display a color picker (regardless of whether it's currently shown).</summary>
+        </member>
         <member name="M:StardewValley.Menus.ItemGrabMenu.setEssential(System.Boolean,System.Boolean)">
             <summary>Set whether to rescue items from the menu when it's force-closed (e.g. from passing out at 2am). Rescued items will be added to the player's inventory if possible, else dropped onto the ground at their feet.</summary>
             <param name="essential">Whether to rescue items on force-close.</param>
@@ -12709,7 +12740,7 @@
             <param name="filter">A search filter to apply to the displayed list of saves, if any.</param>
         </member>
         <member name="M:StardewValley.Menus.LoadGameMenu.FindSaveGames(System.String)">
-            <summary>Get the save games to.</summary>
+            <summary>Get the save games to show in the menu.</summary>
             <param name="filter">A search filter to apply to the displayed list of saves, if any.</param>
             <returns>Returns a list of farmers for which to add save slots. If a <paramref name="filter"/> is given, filtered-out slots will be null in the list.</returns>
         </member>
@@ -12912,6 +12943,9 @@
         </member>
         <member name="M:StardewValley.Menus.MuseumMenu.draw(Microsoft.Xna.Framework.Graphics.SpriteBatch)">
             <inheritdoc />
+        </member>
+        <member name="F:StardewValley.Menus.NamingMenu.FilterInput">
+            <summary>Whether to apply filtering to the text input.</summary>
         </member>
         <member name="M:StardewValley.Menus.NamingMenu.receiveGamePadButton(Microsoft.Xna.Framework.Input.Buttons)">
             <inheritdoc />
@@ -14016,6 +14050,13 @@
         </member>
         <member name="E:StardewValley.Menus.TitleMenu.OnCreatedNewCharacter">
             <summary>An event raised when the player clicks the button to start after creating their new main character.</summary>
+        </member>
+        <member name="P:StardewValley.Menus.TitleMenu.subMenu">
+            <summary>The sub-menu to show instead of the main title screen.</summary>
+            <remarks>When returning to the main title screen from a submenu, call <see cref="M:StardewValley.Menus.TitleMenu.ReturnToMainTitleScreen"/> instead of setting it to null to allow cleanup.</remarks>
+        </member>
+        <member name="M:StardewValley.Menus.TitleMenu.ReturnToMainTitleScreen">
+            <summary>Exit the current sub-menu and return to the main title screen.</summary>
         </member>
         <member name="M:StardewValley.Menus.TitleMenu.receiveRightClick(System.Int32,System.Int32,System.Boolean)">
             <inheritdoc />
@@ -16030,6 +16071,9 @@
         <member name="M:StardewValley.Objects.ItemPedestal.checkForAction(StardewValley.Farmer,System.Boolean)">
             <inheritdoc />
         </member>
+        <member name="T:StardewValley.Objects.Mannequin">
+            <summary>A mannequin which can be placed in the world and used to store and display clothing.</summary>
+        </member>
         <member name="M:StardewValley.Objects.Mannequin.ForEachItem(StardewValley.Delegates.ForEachItemDelegate,StardewValley.Delegates.GetForEachItemPathDelegate)">
             <inheritdoc />
         </member>
@@ -17863,6 +17907,9 @@
             <summary>Get whether the given quest ID is valid.</summary>
             <param name="id">The quest ID to check.</param>
         </member>
+        <member name="M:StardewValley.Quests.Quest.CreateInitializationRandom">
+            <summary>Create an RNG instance intended to initialize the quest fields.</summary>
+        </member>
         <member name="M:StardewValley.Quests.Quest.TryParseConditions(System.String[],System.String[]@,System.String@,System.Boolean)">
             <summary>Get the split quest conditions from raw quest fields, if it's found and valid.</summary>
             <param name="questFields">The raw quest fields.</param>
@@ -18277,6 +18324,12 @@
         </member>
         <member name="F:StardewValley.SaveMigrations.SaveFixes.AddJunimoKartAndPrairieKingStats">
             <summary>For Stardew Valley 1.6.9, retroactively set the new Junimo Kart and Prairie King stats like <see cref="F:StardewValley.Constants.StatKeys.CompletedJunimoKart"/>.</summary>
+        </member>
+        <member name="F:StardewValley.SaveMigrations.SaveFixes.FixEmptyLostAndFoundItemStacks">
+            <summary>For Stardew Valley 1.6.15, fix lost and found items that have a 0 stack size (mainly on mobile).</summary>
+        </member>
+        <member name="F:StardewValley.SaveMigrations.SaveFixes.FixDuplicateMissedMail">
+            <summary>For Stardew Valley 1.6.15, purge duplicate mail entries that were added erroneously by <see cref="M:StardewValley.Farmer.AddMissedMailAndRecipes"/>.</summary>
         </member>
         <member name="T:StardewValley.SaveMigrations.SaveMigrator">
             <summary>Manages and applies migrations to save files.</summary>
@@ -19110,6 +19163,11 @@
             <param name="data">The data to copy.</param>
             <param name="comparer">The equality comparer to use when comparing keys, or null to use the default comparer for the key type.</param>
         </member>
+        <member name="M:StardewValley.SerializableDictionary`2.AddDuringDeserialization(`0,`1)">
+            <summary>Add a pair read from the raw XML during deserialization.</summary>
+            <param name="key">The key to add.</param>
+            <param name="value">The value to add.</param>
+        </member>
         <member name="T:StardewValley.SerializableDictionaryWithCaseInsensitiveKeys`1">
             <summary>An implementation of <see cref="T:StardewValley.SerializableDictionary`2"/> that has case-insensitive keys.</summary>
             <typeparam name="TValue">The value type.</typeparam>
@@ -19481,6 +19539,9 @@
             <summary>Get the number of a given monster type that the player has killed.</summary>
             <param name="name">The monster's internal name.</param>
         </member>
+        <member name="M:StardewValley.Stats.checkForBooksReadAchievement">
+            <summary>Unlock the 'Well Read' achievement if its criteria has been met.</summary>
+        </member>
         <member name="M:StardewValley.Stats.checkForCookingAchievements">
             <summary>Unlock the cooking-related achievements if their criteria have been met.</summary>
         </member>
@@ -19495,6 +19556,9 @@
         </member>
         <member name="M:StardewValley.Stats.checkForArchaeologyAchievements">
             <summary>Unlock the artifact donation-related achievements if their criteria have been met.</summary>
+        </member>
+        <member name="M:StardewValley.Stats.checkForHeldItemAchievements">
+            <summary>Unlock achievements related to the items held by the player.</summary>
         </member>
         <member name="M:StardewValley.Stats.checkForMoneyAchievements">
             <summary>Unlock the money-related achievements if their criteria have been met.</summary>
@@ -19544,6 +19608,13 @@
             <summary>Get whether platform achievements can be unlocked now based on platform restrictions.</summary>
             <param name="isDirectUnlock">Whether we're unlocking the achievements at the point where they normally trigger (i.e. not retroactively).</param>
             <remarks>See remarks on <see cref="P:StardewValley.Stats.AllowRetroactiveAchievements"/>.</remarks>
+        </member>
+        <member name="T:StardewValley.StatsDictionary`1">
+            <summary>An implementation of <see cref="T:StardewValley.SerializableDictionary`2"/> specialized for storing <see cref="T:StardewValley.Stats"/> values.</summary>
+            <typeparam name="TValue">The numeric stat value type. This must be <see cref="T:System.Int32"/>, <see cref="T:System.Int64"/>, or <see cref="T:System.UInt32"/>.</typeparam>
+        </member>
+        <member name="M:StardewValley.StatsDictionary`1.AddDuringDeserialization(System.String,`0)">
+            <inheritdoc />
         </member>
         <member name="T:StardewValley.StringBuilderFormatEx">
             <summary>
@@ -21855,6 +21926,16 @@
             <param name="positionTile">The tile position.</param>
             <param name="acceptableDistanceFromScreenNonTile">The maximum tile distance outside the screen viewport to allow.</param>
             <param name="location">The location whose position to check.</param>
+        </member>
+        <member name="M:StardewValley.Utility.FilterDirtyWords(System.String)">
+            <summary>Apply platform-specific bad word filtering to a given text.</summary>
+            <param name="words">The text to filter.</param>
+            <returns>Returns the text with any bad words removed or censored.</returns>
+        </member>
+        <member name="M:StardewValley.Utility.FilterDirtyWordsIfStrictPlatform(System.String)">
+            <summary>Apply platform-specific bad word filtering to a given text, but only if the current platform requires strict filtering of all text inputs (including text only shown locally).</summary>
+            <param name="words">The text to filter.</param>
+            <returns>Returns the text with any bad words removed or censored if applicable.</returns>
         </member>
         <member name="M:StardewValley.Utility.FilterUserName(System.String)">
             <summary>
