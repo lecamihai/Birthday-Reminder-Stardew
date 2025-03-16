@@ -6,7 +6,7 @@ using StardewValley;
 using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
-using StardewValley.GameData.Objects; // Add this namespace for object data
+using StardewValley.GameData.Objects;
 
 namespace BirthdayReminderMod
 {
