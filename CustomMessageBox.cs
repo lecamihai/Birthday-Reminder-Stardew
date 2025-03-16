@@ -10,300 +10,160 @@ using StardewValley.GameData.Objects;
 
 namespace BirthdayReminderMod
 {
-    public class CustomMessageBox : IClickableMenu
+      public class CustomMessageBox : IClickableMenu
     {
-        // Layout configuration
-        private readonly int paddingTop = 16;
-        private readonly int paddingBetween = 8;
-        private readonly int paddingBottom = 16;
-        private readonly int paddingSides = 16;
-        private readonly int iconSize = 32;
-        private readonly int iconSpacing = 8;
-
-        // Positioning offsets for the box
-        private readonly int offsetX = 16;
-        private readonly int offsetY = 280;
-
-        // NPC sprite and hearts
-        private readonly float spriteScale = 3f;
-        private readonly Texture2D npcSprite;
-        private readonly Texture2D heartTexture;
-        private readonly int maxHearts = 10;
-        private readonly int heartsPerRow = 5;
-        private readonly int heartSourceWidth = 7;
-        private readonly int heartScale = 4;
-        private readonly int heartSpacing = 4;
-
-        // Offsets for sprite and hearts
-        private readonly int spriteYOffset = -10;
-        private readonly int heartXOffset = 20;
-        private readonly int heartYOffset = 10;
-
-        private readonly string message;
-        private readonly List<string> lovedGifts;
-        private readonly IMonitor monitor;
-        private readonly NPC npc;
-
+        private int paddingTop = 16;
+        private int paddingBetween = 8;
+        private int paddingBottom = 16;
+        private int paddingSides = 16;
+        private int iconSize = 32;
+        private int iconSpacing = 8;
+        private float spriteScale = 3f;
+        private Texture2D npcSprite;
+        private Texture2D heartTexture;
+        private int maxHearts = 10;
+        private int heartsPerRow = 5;
+        private int heartScale = 4;
+        private int heartSpacing = 4;
+        private int spriteYOffset = -10;
+        private int heartXOffset = 20;
+        private int heartYOffset = 10;
+        private string message;
+        private List<string> lovedGifts;
+        private IMonitor monitor;
+        private NPC npc;
         private int lineHeight;
 
-        public CustomMessageBox(string message, List<string> lovedGifts, IMonitor monitor, NPC npc)
-            : base(0, 0, 0, 0, true)
+        public CustomMessageBox(string message, List<string> lovedGifts, IMonitor monitor, NPC npc) : base(0, 0, 0, 0, true)
         {
             this.message = message;
             this.lovedGifts = lovedGifts;
             this.monitor = monitor;
             this.npc = npc;
-
             this.npcSprite = npc?.Sprite?.Texture;
             this.heartTexture = Game1.content.Load<Texture2D>("LooseSprites\\Cursors");
-
             this.lineHeight = (int)Game1.smallFont.MeasureString("A").Y;
-
-            // Calculate dimensions
             CalculateDimensions();
-
-            // Position top-right
-            int screenWidth = Game1.uiViewport.Width;
-            int screenHeight = Game1.uiViewport.Height;
-            this.xPositionOnScreen = screenWidth - this.width - offsetX;
-            this.yPositionOnScreen = offsetY;
+            this.xPositionOnScreen = Game1.uiViewport.Width - this.width - 16;
+            this.yPositionOnScreen = 320;
         }
 
         private void CalculateDimensions()
         {
             string[] lines = message.Split('\n');
-            int numberOfMessageLines = lines.Length;
-
-            // Get max line width for the message
             float maxLineWidth = 0f;
             foreach (var line in lines)
             {
                 float lineWidth = Game1.smallFont.MeasureString(line).X;
-                if (lineWidth > maxLineWidth)
-                    maxLineWidth = lineWidth;
+                if (lineWidth > maxLineWidth) maxLineWidth = lineWidth;
             }
 
-            // Calculate width needed for gift icons and text
             float giftsWidth = 0f;
             foreach (var gift in lovedGifts)
             {
                 string giftName = GetItemName(gift);
                 float giftWidth = Game1.smallFont.MeasureString(giftName).X + iconSize + iconSpacing;
-                if (giftWidth > giftsWidth)
-                    giftsWidth = giftWidth;
+                if (giftWidth > giftsWidth) giftsWidth = giftWidth;
             }
 
-            // Calculate hearts width
-            int heartFullWidth = heartSourceWidth * heartScale;
-            int heartsWidth = heartsPerRow * (heartFullWidth + heartSpacing) + heartSpacing;
-
-            int combinedSpriteHeartsWidth = 0;
+            int heartsWidth = heartsPerRow * (7 * heartScale + heartSpacing) + heartSpacing;
+            int combinedWidth = 0;
             if (npcSprite != null)
             {
                 int spriteWidth = (int)(npc.Sprite.SourceRect.Width * spriteScale);
-                combinedSpriteHeartsWidth = spriteWidth + heartSpacing + heartsWidth + heartXOffset;
+                combinedWidth = spriteWidth + heartSpacing + heartsWidth + heartXOffset;
             }
 
-            int totalWidth = Math.Max((int)maxLineWidth, Math.Max((int)giftsWidth, combinedSpriteHeartsWidth));
-            totalWidth += paddingSides * 2;
+            int totalWidth = Math.Max((int)maxLineWidth, Math.Max((int)giftsWidth, combinedWidth)) + paddingSides * 2;
+            this.width = totalWidth < 300 ? 300 : totalWidth;
 
-            // Minimum width
-            int minWidth = 300;
-            if (totalWidth < minWidth)
-                totalWidth = minWidth;
-
-            int totalHeight = paddingTop 
-                              + (numberOfMessageLines * lineHeight) 
-                              + paddingBetween
-                              + (lovedGifts.Count * (lineHeight + iconSpacing)) 
-                              + paddingBottom;
-
-            if (npcSprite != null)
-            {
-                int spriteHeight = (int)(npc.Sprite.SourceRect.Height * spriteScale);
-                totalHeight += spriteHeight + paddingBetween;
-            }
-
-            this.width = totalWidth;
+            int totalHeight = paddingTop + (lines.Length * lineHeight) + paddingBetween + (lovedGifts.Count * (lineHeight + iconSpacing)) + paddingBottom;
+            if (npcSprite != null) totalHeight += (int)(npc.Sprite.SourceRect.Height * spriteScale) + paddingBetween;
             this.height = totalHeight;
         }
 
         public override void draw(SpriteBatch b)
         {
-            DrawBox(b);
-
-            float textStartX = this.xPositionOnScreen + paddingSides;
-            float textStartY = this.yPositionOnScreen + paddingTop;
-
+            IClickableMenu.drawTextureBox(b, xPositionOnScreen, yPositionOnScreen, width, height, Color.White);
+            Vector2 textPos = new Vector2(xPositionOnScreen + paddingSides, yPositionOnScreen + paddingTop);
             string[] lines = message.Split('\n');
 
-            // Draw main message lines
             if (lines.Length > 0)
-            {
-                b.DrawString(Game1.smallFont, lines[0], new Vector2(textStartX, textStartY), Color.Black);
-            }
+                b.DrawString(Game1.smallFont, lines[0], textPos, Color.Black);
 
-            // Draw NPC sprite and hearts
             if (npcSprite != null && lines.Length > 1)
-            {
-                textStartY = DrawNPCSpriteAndHearts(b, textStartX, textStartY + lineHeight + paddingBetween);
-            }
+                textPos.Y = DrawNPCSpriteAndHearts(b, textPos.X, textPos.Y + lineHeight + paddingBetween);
 
-            // Draw remaining message lines (e.g., "They love:")
             for (int i = 1; i < lines.Length; i++)
-            {
-                b.DrawString(Game1.smallFont, lines[i], new Vector2(textStartX, textStartY + (i - 1) * lineHeight), Color.Black);
-            }
+                b.DrawString(Game1.smallFont, lines[i], new Vector2(textPos.X, textPos.Y + (i - 1) * lineHeight), Color.Black);
 
-            // Move below the last line of message
-            textStartY += (lines.Length - 1) * lineHeight + paddingBetween;
-
-            // Draw gifts
-            DrawGifts(b, textStartX, textStartY);
-
-            this.drawMouse(b);
+            textPos.Y += (lines.Length - 1) * lineHeight + paddingBetween;
+            DrawGifts(b, textPos.X, textPos.Y);
+            drawMouse(b);
         }
 
-        private void DrawBox(SpriteBatch b)
+        private float DrawNPCSpriteAndHearts(SpriteBatch b, float x, float y)
         {
-            IClickableMenu.drawTextureBox(b, this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, Color.White);
+            if (npcSprite == null) return y;
+
+            Rectangle sourceRect = new Rectangle(0, 0, npc.Sprite.SpriteWidth, npc.Sprite.SpriteHeight);
+            int spriteY = (int)y + spriteYOffset;
+            b.Draw(npcSprite, new Vector2(x, spriteY), sourceRect, Color.White, 0f, Vector2.Zero, spriteScale, SpriteEffects.None, 0.86f);
+            DrawHearts(b, (int)x + (int)(npc.Sprite.SpriteWidth * spriteScale) + heartXOffset, spriteY + (int)(npc.Sprite.SpriteHeight * spriteScale / 2), Game1.player.getFriendshipHeartLevelForNPC(npc.Name));
+            return y + (int)(npc.Sprite.SpriteHeight * spriteScale) + paddingBetween;
         }
 
-        private float DrawNPCSpriteAndHearts(SpriteBatch b, float textStartX, float currentY)
+        private void DrawHearts(SpriteBatch b, int x, int y, int hearts)
         {
-            if (npcSprite == null || npc == null)
-                return currentY;
-
-            int spriteWidth = npc.Sprite.SpriteWidth;
-            int spriteHeight = npc.Sprite.SpriteHeight;
-
-            // Force front-facing frame (down direction, first frame)
-            int baseFrame = 0;
-            int sheetColumns = npcSprite.Width / spriteWidth;
-            int sourceX = (baseFrame % sheetColumns) * spriteWidth;
-            int sourceY = (baseFrame / sheetColumns) * spriteHeight;
-            Rectangle sourceRect = new Rectangle(sourceX, sourceY, spriteWidth, spriteHeight);
-
-            // Draw NPC sprite
-            int spriteX = (int)textStartX;
-            int spriteY = (int)(currentY + spriteYOffset);
-
-            b.Draw(
-                npcSprite,
-                new Vector2(spriteX, spriteY),
-                sourceRect,
-                Color.White,
-                0f,
-                Vector2.Zero,
-                spriteScale,
-                SpriteEffects.None,
-                0.86f
-            );
-
-            // Draw hearts
-            DrawHearts(b, spriteX + (int)(spriteWidth * spriteScale) + heartXOffset, spriteY + (int)(spriteHeight * spriteScale / 2), Game1.player.getFriendshipHeartLevelForNPC(npc.Name));
-
-            return currentY + (int)(spriteHeight * spriteScale) + paddingBetween;
-        }
-
-        private void DrawHearts(SpriteBatch b, int startX, int centerY, int affectionLevel)
-        {
-            int heartFullWidth = heartSourceWidth * heartScale;
-            int heartRows = (int)Math.Ceiling((float)maxHearts / heartsPerRow);
-
-            // Position hearts so they are roughly centered vertically
-            int totalHeartsHeight = heartRows * (heartFullWidth + heartSpacing) - heartSpacing;
-            int startY = centerY - totalHeartsHeight / 2 + heartYOffset;
+            int heartSize = 7 * heartScale;
+            int startY = y - (maxHearts / heartsPerRow * (heartSize + heartSpacing)) / 2 + heartYOffset;
 
             for (int i = 0; i < maxHearts; i++)
             {
                 int row = i / heartsPerRow;
                 int col = i % heartsPerRow;
-
-                bool filled = i < affectionLevel;
-                Rectangle sourceRect = new Rectangle(211 + (filled ? 0 : 7), 428, 7, 6);
-
-                b.Draw(
-                    heartTexture,
-                    new Vector2(
-                        startX + col * (heartFullWidth + heartSpacing),
-                        startY + row * (heartFullWidth + heartSpacing)
-                    ),
-                    sourceRect,
-                    Color.White,
-                    0f,
-                    Vector2.Zero,
-                    heartScale,
-                    SpriteEffects.None,
-                    0.87f
-                );
+                Rectangle sourceRect = new Rectangle(211 + (i < hearts ? 0 : 7), 428, 7, 6);
+                b.Draw(heartTexture, new Vector2(x + col * (heartSize + heartSpacing), startY + row * (heartSize + heartSpacing)), sourceRect, Color.White, 0f, Vector2.Zero, heartScale, SpriteEffects.None, 0.87f);
             }
         }
 
-        private void DrawGifts(SpriteBatch b, float textStartX, float textStartY)
+        private void DrawGifts(SpriteBatch b, float x, float y)
         {
+            float startX = x;
             for (int i = 0; i < lovedGifts.Count; i++)
             {
                 string giftId = lovedGifts[i];
                 string giftName = GetItemName(giftId);
                 int itemId = GetItemId(giftId);
-                int yPosition = (int)(textStartY + i * (lineHeight + iconSpacing));
-                float currentX = textStartX;
+                float yPos = y + i * (lineHeight + iconSpacing);
 
                 if (itemId != -1)
                 {
-                    // Draw icon
-                    Texture2D texture = Game1.objectSpriteSheet;
-                    Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(texture, itemId, 16, 16);
-                    b.Draw(texture, new Vector2(currentX, yPosition), sourceRect, Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0.86f);
-
-                    currentX += iconSize + iconSpacing;
+                    Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, itemId, 16, 16);
+                    b.Draw(Game1.objectSpriteSheet, new Vector2(startX, yPos), sourceRect, Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0.86f);
+                    b.DrawString(Game1.smallFont, giftName, new Vector2(startX + iconSize + iconSpacing, yPos), Color.Black);
                 }
-
-                // Draw gift name
-                b.DrawString(Game1.smallFont, giftName, new Vector2(currentX, yPosition), Color.Black);
+                else
+                {
+                    b.DrawString(Game1.smallFont, giftName, new Vector2(startX, yPos), Color.Black);
+                }
             }
         }
 
-        private int GetItemId(string itemId)
-        {
-            if (int.TryParse(itemId, out int id))
-            {
-                return id;
-            }
-            return -1;
-        }
+        private int GetItemId(string itemId) => int.TryParse(itemId, out int id) ? id : -1;
 
         private string GetItemName(string itemId)
         {
-            // Fetch the item data from the game's object data using the item ID as a string
-            if (Game1.objectData.TryGetValue(itemId, out ObjectData objectData))
+            if (Game1.objectData.TryGetValue(itemId, out ObjectData data))
             {
-                // Check if the DisplayName is a localization key
-                string displayName = objectData.DisplayName;
-                if (displayName.StartsWith("[") && displayName.Contains("]"))
+                string name = data.DisplayName;
+                if (name.StartsWith("[") && name.Contains("]"))
                 {
-                    // Extract the localization key
-                    string localizationKey = displayName.TrimStart('[').Split(']')[0];
-
-                    // Fix the key format to match the expected format
-                    // Example: "[LocalizedText Strings\Objects:HotPepper_Name]" -> "Strings\\Objects:HotPepper_Name"
-                    localizationKey = localizationKey.Replace("LocalizedText Strings\\", "Strings\\");
-
-                    try
-                    {
-                        // Get the localized name using the key
-                        return Game1.content.LoadString(localizationKey);
-                    }
-                    catch (Exception ex)
-                    {
-                        this.monitor.Log($"Failed to load localized name for key '{localizationKey}': {ex.Message}", LogLevel.Warn);
-                        return displayName; // Fallback to the raw DisplayName
-                    }
+                    string key = name.TrimStart('[').Split(']')[0].Replace("LocalizedText Strings\\", "Strings\\");
+                    try { return Game1.content.LoadString(key); }
+                    catch { monitor.Log($"Failed loading name for {key}", LogLevel.Warn); }
                 }
-
-                // If it's not a localization key, return the DisplayName as-is
-                return displayName;
+                return name;
             }
             return "Unknown Item";
         }
