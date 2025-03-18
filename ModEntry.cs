@@ -46,7 +46,7 @@ namespace BirthdayReminderMod
         {
             if (!buttonVisible) return;
 
-            int x = Game1.uiViewport.Width - 300 + 100;
+            int x = Game1.uiViewport.Width - 300 + 10;
             int y = 255;
 
             
@@ -61,7 +61,9 @@ namespace BirthdayReminderMod
 
             if (birthdayButton.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
             {
-                IClickableMenu.drawHoverText(Game1.spriteBatch, "Birthdays", Game1.smallFont);
+                NPC npc = birthdayNPCs[0];
+                var npcInfo = npcDataProvider.GetNPCData()[npc.Name];
+                IClickableMenu.drawHoverText(Game1.spriteBatch,  $"It's {npc.Name}'s birthday!", Game1.smallFont);
             }
         }
 
@@ -69,8 +71,9 @@ namespace BirthdayReminderMod
         {
             if (e.Button == SButton.MouseLeft && 
                 buttonVisible && 
-                birthdayButton?.containsPoint(Game1.getMouseX(), Game1.getMouseY()) == true)
+                birthdayButton?.containsPoint(Game1.getMouseX(true), Game1.getMouseY(true)) == true)
             {
+                // Handle button click
                 if (Game1.activeClickableMenu is CustomMessageBox)
                 {
                     Game1.exitActiveMenu();
