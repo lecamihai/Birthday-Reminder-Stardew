@@ -4,10 +4,8 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using StardewValley.Menus;
 using System.Collections.Generic;
-using StardewValley.GameData.Objects;
 
 namespace BirthdayReminderMod
 {
@@ -29,11 +27,12 @@ namespace BirthdayReminderMod
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             birthdayNPCs.Clear();
-            string dateKey = $"{Game1.currentSeason} {Game1.dayOfMonth}";
+            string currentSeason = Game1.currentSeason;
+            int currentDay = Game1.dayOfMonth;
 
             foreach (var npcInfo in npcDataProvider.GetNPCData().Values)
             {
-                if (npcInfo.Birthday.Equals(dateKey, StringComparison.OrdinalIgnoreCase))
+                if (npcInfo.Season.Equals(currentSeason, StringComparison.OrdinalIgnoreCase) && npcInfo.Day == currentDay)
                 {
                     if (Game1.getCharacterFromName(npcInfo.Name) is NPC npc)
                         birthdayNPCs.Add(npc);
@@ -88,7 +87,9 @@ namespace BirthdayReminderMod
                         $"It's {npc.Name}'s birthday!\nThey love:",
                         npcInfo.LovedGifts,
                         Monitor,
-                        npc
+                        npc,
+                        npcInfo.Schedule, // Pass the schedule (Dictionary<string, List<ScheduleSlot>>)
+                        npcDataProvider
                     );
                     Game1.playSound("bigSelect");
                     this.Helper.Input.Suppress(e.Button);
