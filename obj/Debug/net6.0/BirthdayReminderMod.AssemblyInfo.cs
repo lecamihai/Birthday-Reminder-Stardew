@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BirthdayReminderMod")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f3eb89b979921e2fd85bafde0793e70dc4e0bc8a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8bea9e331f51cad069ded7334310a1fabaf79775")]
 [assembly: System.Reflection.AssemblyProductAttribute("BirthdayReminderMod")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BirthdayReminderMod")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

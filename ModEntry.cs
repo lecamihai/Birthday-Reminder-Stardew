@@ -85,8 +85,12 @@ namespace BirthdayReminderMod
 
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
-            if (e.Button == SButton.MouseLeft && 
-                buttonVisible && 
+            // Check if the button is visible and the player is not in a cutscene
+            if (!buttonVisible || Game1.eventUp)
+                return;
+
+            // Check if the left mouse button or the "A" button on the controller is pressed
+            if ((e.Button == SButton.MouseLeft || e.Button == SButton.ControllerA) && 
                 birthdayButton?.containsPoint(Game1.getMouseX(true), Game1.getMouseY(true)) == true)
             {
                 // Handle button click
