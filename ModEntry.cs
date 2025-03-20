@@ -22,6 +22,17 @@ namespace BirthdayReminderMod
             helper.Events.GameLoop.DayStarted += OnDayStarted;
             helper.Events.Display.RenderedHud += OnRenderedHud;
             helper.Events.Input.ButtonPressed += OnButtonPressed;
+            helper.Events.GameLoop.UpdateTicked += OnUpdateTicked; // Add this line
+        }
+
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        {
+            // Check if the cutscene has ended and reset buttonVisible
+            if (!Game1.eventUp)
+            {
+                // Re-evaluate buttonVisible based on whether there are birthdays
+                buttonVisible = birthdayNPCs.Count > 0;
+            }
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
@@ -43,12 +54,18 @@ namespace BirthdayReminderMod
 
         private void OnRenderedHud(object sender, RenderedHudEventArgs e)
         {
+            // Hide the button if a cutscene is active
+            if (Game1.eventUp)
+            {
+                return; // Don't set buttonVisible to false here
+            }
+
+            // Only proceed if the button is supposed to be visible
             if (!buttonVisible) return;
 
             int x = Game1.uiViewport.Width - 300 + 10;
             int y = 255;
 
-            
             birthdayButton = new ClickableTextureComponent(
                 new Rectangle(x, y, 48, 48),
                 Game1.objectSpriteSheet,
@@ -88,7 +105,6 @@ namespace BirthdayReminderMod
                         npcInfo.LovedGifts,
                         Monitor,
                         npc,
-                        npcInfo.Schedule, // Pass the schedule (Dictionary<string, List<ScheduleSlot>>)
                         npcDataProvider
                     );
                     Game1.playSound("bigSelect");

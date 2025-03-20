@@ -35,10 +35,10 @@ namespace BirthdayReminderMod
         private int lineHeight;
         private string currentLocation;
         private NPCDataProvider npcDataProvider;
-        
+        private string fromTime;
         private string untilTime;
 
-        public CustomMessageBox(string message, List<string> lovedGifts, IMonitor monitor, NPC npc, Dictionary<string, List<ScheduleSlot>> schedule, NPCDataProvider npcDataProvider) : base(0, 0, 0, 0, true)
+        public CustomMessageBox(string message, List<string> lovedGifts, IMonitor monitor, NPC npc, NPCDataProvider npcDataProvider):base(0, 0, 0, 0, true)
         {
             this.message = message;
             this.lovedGifts = lovedGifts;
@@ -49,9 +49,10 @@ namespace BirthdayReminderMod
             this.lineHeight = (int)Game1.smallFont.MeasureString("A").Y;
             this.npcDataProvider = npcDataProvider;
 
-            // Get the current location and "until" time
-            var (location, untilTime) = GetCurrentLocation(npc, schedule);
+            // Get the current location, start time, and end time
+            var (location, fromTime, untilTime) = GetCurrentLocation(npc);
             this.currentLocation = location;
+            this.fromTime = fromTime;
             this.untilTime = untilTime;
 
             CalculateDimensions();
@@ -88,110 +89,208 @@ namespace BirthdayReminderMod
             int totalWidth = Math.Max((int)maxLineWidth, Math.Max((int)giftsWidth, combinedWidth)) + paddingSides * 2;
             this.width = totalWidth < 300 ? 300 : totalWidth;
 
-            // Calculate the height based on the actual draw order
+            // Calculate height
             int totalHeight = paddingTop;
 
-            // 1. Birthday message
+            // 1. Birthday message lines
             totalHeight += lines.Length * lineHeight;
 
             // 2. NPC sprite and hearts
             if (npcSprite != null)
             {
-                totalHeight += paddingBetween; // Space after message
-                totalHeight += (int)(npc.Sprite.SourceRect.Height * spriteScale); // Sprite height
-                totalHeight += paddingBetween; // Space after sprite
-                totalHeight += maxHearts / heartsPerRow * (7 * heartScale + heartSpacing); // Hearts height
+                totalHeight += paddingBetween;
+                totalHeight += (int)(npc.Sprite.SourceRect.Height * spriteScale);
+                totalHeight += paddingBetween;
+                totalHeight += (maxHearts / heartsPerRow) * (7 * heartScale + heartSpacing);
             }
 
             // 3. Location text
-            totalHeight += paddingBetween; // Space after hearts
-            totalHeight += 2 * lineHeight; // "Current Location" lines
-            if (!string.IsNullOrEmpty(this.untilTime))
+            totalHeight += paddingBetween;
+            int maxTextWidth = this.width - 2 * paddingSides;
+
+            // "Current Schedule:" line
+            totalHeight += lineHeight;
+
+            // Current location lines
+            List<string> wrappedCurrentLocation = WrapTextWithBullet(currentLocation, Game1.smallFont, maxTextWidth);
+            totalHeight += wrappedCurrentLocation.Count * lineHeight;
+
+            // Schedule time lines
+            if (!string.IsNullOrEmpty(fromTime) && !string.IsNullOrEmpty(untilTime))
             {
-                totalHeight += lineHeight; // "Until" line
+                string scheduleTimeText = $"From {fromTime} - {untilTime}";
+                List<string> wrappedScheduleTime = WrapTextWithBullet(scheduleTimeText, Game1.smallFont, maxTextWidth);
+                totalHeight += wrappedScheduleTime.Count * lineHeight;
             }
 
             // 4. Loved gifts
-            totalHeight += paddingBetween; // Space after location text
+            totalHeight += paddingBetween;
             totalHeight += (lovedGifts.Count * lineHeight) + (Math.Max(0, lovedGifts.Count - 1) * iconSpacing);
 
-            this.height = totalHeight - 50;
+            this.height = totalHeight - 90;
         }
 
-        private (string Location, string UntilTime) GetCurrentLocation(NPC npc, Dictionary<string, List<ScheduleSlot>> schedule)
+        private (string Location, string FromTime, string UntilTime) GetCurrentLocation(NPC npc)
         {
-            // Debug: Log the NPC and schedule
-            monitor.Log($"Getting current location for NPC: {npc?.Name ?? "null"}");
-            monitor.Log($"Schedule: {(schedule != null ? string.Join(", ", schedule.Keys) : "null")}");
-
-            // Check for null NPC
             if (npc == null)
             {
                 monitor.Log("NPC is null. Cannot determine location.", LogLevel.Error);
-                return ("Unknown Location", null);
+                return ("Unknown Location", null, null);
             }
 
-            // Check for null schedule
-            if (schedule == null)
+            try
             {
-                monitor.Log("Schedule is null. Cannot determine location.", LogLevel.Error);
-                return ("Unknown Location", null);
-            }
+                // Load NPC schedule from game files
+                Dictionary<string, string> scheduleData = Game1.content.Load<Dictionary<string, string>>($"Characters\\schedules\\{npc.Name}");
+                
+                // Determine schedule key
+                string scheduleKey = Game1.currentSeason;
+                if (Game1.IsGreenRainingHere())
+                    scheduleKey = "GreenRain";
+                else if (Game1.isRaining)
+                    scheduleKey = "rain";
 
-            // Get the current time in the game
-            int currentTime = Game1.timeOfDay;
-
-            // Get the schedule for the current conditions (e.g., rain, married, etc.)
-            string scheduleKey = npcDataProvider.GetNPCData()[npc.Name].Season;
-            if (Game1.isRaining)
-                scheduleKey = "rain";
-            else if (Game1.IsGreenRainingHere())
-                scheduleKey = "GreenRain";
-
-            // Debug: Log the schedule key
-            monitor.Log($"Using schedule key: {scheduleKey}");
-
-            // Get the schedule for the current key
-            if (schedule.TryGetValue(scheduleKey, out List<ScheduleSlot> scheduleSlots))
-            {
-                // Debug: Log the schedule data
-                monitor.Log($"Schedule data: {string.Join(", ", scheduleSlots.Select(s => $"{s.StartTime}-{s.EndTime} {s.Location}"))}");
-
-                // Sort schedule slots by start time
-                var sortedSlots = scheduleSlots.OrderBy(s => s.StartTime).ToList();
-
-                // Handle default pre-9AM behavior
-                if (currentTime < 900 && !sortedSlots.Any(s => s.StartTime < 900))
+                // 1. Check for birthday schedule
+                string birthdayKey = $"{Game1.currentSeason}_{Game1.dayOfMonth}";
+                if (scheduleData.ContainsKey(birthdayKey))
                 {
-                    // NPC is at home until 9:00 AM
-                    return ("Sleeping", "9:00 AM");
+                    scheduleKey = birthdayKey;
                 }
-
-                // Find the current time slot
-                foreach (var slot in sortedSlots)
+                
+                // 2. Check for day-of-week schedule (e.g., "Sun")
+                else
                 {
-                    if (currentTime >= slot.StartTime && currentTime < slot.EndTime)
+                    string dayOfWeek = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
+                    string dayOfWeekKey = $"{Game1.currentSeason}_{dayOfWeek}";
+                    if (scheduleData.ContainsKey(dayOfWeekKey))
                     {
-                        // Return the location and the end time of the current slot
-                        return (slot.Location, FormatTime(slot.EndTime));
+                        scheduleKey = dayOfWeekKey;
+                    }
+                    // 3. Check for standalone day-of-week (e.g., "Sun" without season)
+                    else if (scheduleData.ContainsKey(dayOfWeek))
+                    {
+                        scheduleKey = dayOfWeek;
                     }
                 }
 
-                // If no time slot matches, assume the NPC is at their default location
-                // and will move to the first scheduled activity
-                var firstSlot = sortedSlots.FirstOrDefault();
-                if (firstSlot != null)
+                // 4. Check for festivals
+                foreach (string festivalId in Game1.netWorldState.Value.ActivePassiveFestivals)
                 {
-                    return (npc.DefaultMap, FormatTime(firstSlot.StartTime));
+                    if (scheduleData.ContainsKey(festivalId))
+                    {
+                        scheduleKey = festivalId;
+                        break;
+                    }
+                }
+
+                if (!scheduleData.TryGetValue(scheduleKey, out string scheduleScript))
+                {
+                    monitor.Log($"No schedule found for {npc.Name} with key {scheduleKey}", LogLevel.Warn);
+                    return ("Unknown Location", null, null);
+                }
+
+                // Parse schedule script
+                List<ScheduleSlot> scheduleSlots = new List<ScheduleSlot>();
+                string[] segments = scheduleScript.Split('/');
+                foreach (string segment in segments)
+                {
+                    string[] parts = segment.Split(' ');
+                    if (parts.Length < 4) continue;
+
+                    int startTime = int.Parse(parts[0]);
+                    string location = parts[1];
+                    
+                    // Find end time by looking at next segment's start time
+                    int endTime = 2600; // Default to end of day
+                    scheduleSlots.Add(new ScheduleSlot(startTime, endTime, location));
+                }
+
+                // Sort schedule slots by start time
+                scheduleSlots = scheduleSlots.OrderBy(s => s.StartTime).ToList();
+
+                // Get the current time
+                int currentTime = Game1.timeOfDay;
+
+                // Handle "sleeping" state before the first activity
+                if (currentTime < 600)
+                {
+                    return ("Sleeping", "12:00 AM", FormatTime(600));
+                }
+
+                // Handle "sleeping" state before the first scheduled activity
+                if (scheduleSlots.Count > 0 && currentTime < scheduleSlots[0].StartTime)
+                {
+                    return ("Sleeping", "6:00 AM", FormatTime(scheduleSlots[0].StartTime));
+                }
+
+                // Find the current time slot
+                for (int i = 0; i < scheduleSlots.Count; i++)
+                {
+                    var currentSlot = scheduleSlots[i];
+                    var nextSlot = i < scheduleSlots.Count - 1 ? scheduleSlots[i + 1] : null;
+
+                    if (currentTime >= currentSlot.StartTime && 
+                        (nextSlot == null || currentTime < nextSlot.StartTime))
+                    {
+                        return (currentSlot.Location, 
+                                FormatTime(currentSlot.StartTime), 
+                                FormatTime(nextSlot?.StartTime ?? 2600));
+                    }
+                }
+
+                // Handle "sleeping" state after the last activity
+                if (scheduleSlots.Count > 0 && currentTime >= scheduleSlots.Last().StartTime)
+                {
+                    return ("Sleeping", FormatTime(scheduleSlots.Last().StartTime), "2:00 AM");
+                }
+
+                // Default to "Sleeping" if no schedule is found
+                return ("Sleeping", "12:00 AM", "2:00 AM");
+            }
+            catch (Exception ex)
+            {
+                monitor.Log($"Error loading schedule for {npc.Name}: {ex.Message}", LogLevel.Error);
+                return ("Error loading schedule", null, null);
+            }
+        }
+
+        private List<string> WrapTextWithBullet(string text, SpriteFont font, float maxWidth)
+        {
+            List<string> lines = new List<string>();
+            if (string.IsNullOrEmpty(text))
+                return lines;
+
+            string[] words = text.Split(' ');
+            string bullet = "- ";
+            string indent = "  ";
+            float bulletWidth = font.MeasureString(bullet).X;
+            float indentWidth = font.MeasureString(indent).X;
+
+            string currentLine = bullet;
+            float currentWidth = bulletWidth;
+
+            foreach (string word in words)
+            {
+                string wordWithSpace = word + " ";
+                float wordWidth = font.MeasureString(wordWithSpace).X;
+
+                if (currentWidth + wordWidth > maxWidth)
+                {
+                    lines.Add(currentLine.TrimEnd());
+                    currentLine = indent + wordWithSpace;
+                    currentWidth = indentWidth + wordWidth;
+                }
+                else
+                {
+                    currentLine += wordWithSpace;
+                    currentWidth += wordWidth;
                 }
             }
-            else
-            {
-                monitor.Log($"Schedule key '{scheduleKey}' not found in schedule.", LogLevel.Warn);
-            }
 
-            // Default location if no schedule is found
-            return ("Unknown Location", null);
+            if (!string.IsNullOrWhiteSpace(currentLine))
+                lines.Add(currentLine.TrimEnd());
+
+            return lines;
         }
 
         private string FormatTime(int time)
@@ -227,19 +326,31 @@ namespace BirthdayReminderMod
                 textPos.Y = DrawNPCSpriteAndHearts(b, textPos.X, textPos.Y);
             }
 
-            // Draw the current location and "until" time
-            string locationText = $"Current Schedule: \n - {currentLocation}";
-            if (!string.IsNullOrEmpty(this.untilTime))
-            {
-                locationText += $"\n - Until {this.untilTime}";
-            }
-            b.DrawString(Game1.smallFont, locationText, textPos, Color.Black);
+            // Draw the current location and schedule times
+            int maxTextWidth = this.width - 2 * paddingSides;
 
-            // Move down for the location text
-            textPos.Y += 2 * lineHeight; // "Current Location" and the location itself
-            if (!string.IsNullOrEmpty(this.untilTime))
+            // Draw "Current Schedule:"
+            b.DrawString(Game1.smallFont, "Current Schedule:", textPos, Color.Black);
+            textPos.Y += lineHeight;
+
+            // Draw schedule times if applicable
+            if (!string.IsNullOrEmpty(fromTime) && !string.IsNullOrEmpty(untilTime))
             {
-                textPos.Y += lineHeight; // "Until X time" line
+                string scheduleTimeText = $"{fromTime} - {untilTime}";
+                List<string> wrappedScheduleTime = WrapTextWithBullet(scheduleTimeText, Game1.smallFont, maxTextWidth);
+                foreach (string line in wrappedScheduleTime)
+                {
+                    b.DrawString(Game1.smallFont, line, textPos, Color.Black);
+                    textPos.Y += lineHeight;
+                }
+            }
+
+            // Draw wrapped current location lines
+            List<string> wrappedCurrentLocation = WrapTextWithBullet(currentLocation, Game1.smallFont, maxTextWidth);
+            foreach (string line in wrappedCurrentLocation)
+            {
+                b.DrawString(Game1.smallFont, line, textPos, Color.Black);
+                textPos.Y += lineHeight;
             }
 
             // Draw the rest of the lines (loved gifts)
