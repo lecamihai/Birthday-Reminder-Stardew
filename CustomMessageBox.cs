@@ -142,38 +142,41 @@ namespace BirthdayReminderMod
             {
                 // Load NPC schedule from game files
                 Dictionary<string, string> scheduleData = Game1.content.Load<Dictionary<string, string>>($"Characters\\schedules\\{npc.Name}");
-                
+
                 // Determine schedule key
                 string scheduleKey = Game1.currentSeason;
-                if (Game1.IsGreenRainingHere())
-                    scheduleKey = "GreenRain";
-                else if (Game1.isRaining)
-                    scheduleKey = "rain";
 
-                // 1. Check for birthday schedule
-                string birthdayKey = $"{Game1.currentSeason}_{Game1.dayOfMonth}";
-                if (scheduleData.ContainsKey(birthdayKey))
+                // 1. Check Green Rain schedule
+                if (Game1.IsGreenRainingHere())
                 {
-                    scheduleKey = birthdayKey;
+                    scheduleKey = "GreenRain";
                 }
-                
-                // 2. Check for day-of-week schedule (e.g., "Sun")
+                // 2. Check birthday schedule (season_day)
                 else
                 {
-                    string dayOfWeek = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
-                    string dayOfWeekKey = $"{Game1.currentSeason}_{dayOfWeek}";
-                    if (scheduleData.ContainsKey(dayOfWeekKey))
+                    string birthdayKey = $"{Game1.currentSeason}_{Game1.dayOfMonth}";
+                    if (scheduleData.ContainsKey(birthdayKey))
                     {
-                        scheduleKey = dayOfWeekKey;
+                        scheduleKey = birthdayKey;
                     }
-                    // 3. Check for standalone day-of-week (e.g., "Sun" without season)
-                    else if (scheduleData.ContainsKey(dayOfWeek))
+                    // 3. Check day-of-week with current season (season_dayOfWeek)
+                    else
                     {
-                        scheduleKey = dayOfWeek;
+                        string dayOfWeek = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
+                        string seasonDayOfWeekKey = $"{Game1.currentSeason}_{dayOfWeek}";
+                        if (scheduleData.ContainsKey(seasonDayOfWeekKey))
+                        {
+                            scheduleKey = seasonDayOfWeekKey;
+                        }
+                        // 4. Check standalone day-of-week
+                        else if (scheduleData.ContainsKey(dayOfWeek))
+                        {
+                            scheduleKey = dayOfWeek;
+                        }
                     }
                 }
 
-                // 4. Check for festivals
+                // 5. Check active festivals
                 foreach (string festivalId in Game1.netWorldState.Value.ActivePassiveFestivals)
                 {
                     if (scheduleData.ContainsKey(festivalId))
@@ -183,25 +186,34 @@ namespace BirthdayReminderMod
                     }
                 }
 
-                if (!scheduleData.TryGetValue(scheduleKey, out string scheduleScript))
+                // 6. Fallback logic: Try current season -> spring
+                if (!scheduleData.ContainsKey(scheduleKey))
                 {
-                    monitor.Log($"No schedule found for {npc.Name} with key {scheduleKey}", LogLevel.Warn);
-                    return ("Unknown Location", null, null);
+                    if (scheduleKey == Game1.currentSeason && scheduleData.ContainsKey("spring"))
+                    {
+                        scheduleKey = "spring";
+                        monitor.Log($"Using spring schedule as fallback for {npc.Name}", LogLevel.Debug);
+                    }
+                    else
+                    {
+                        monitor.Log($"No schedule found for {npc.Name} with key {scheduleKey}", LogLevel.Warn);
+                        return ("Unknown Location", null, null);
+                    }
                 }
 
                 // Parse schedule script
+                string scheduleScript = scheduleData[scheduleKey];
                 List<ScheduleSlot> scheduleSlots = new List<ScheduleSlot>();
                 string[] segments = scheduleScript.Split('/');
-                foreach (string segment in segments)
+                for (int i = 0; i < segments.Length; i++)
                 {
-                    string[] parts = segment.Split(' ');
+                    string[] parts = segments[i].Split(' ');
                     if (parts.Length < 4) continue;
 
                     int startTime = int.Parse(parts[0]);
+                    int endTime = i < segments.Length - 1 ? int.Parse(segments[i + 1].Split(' ')[0]) : 2600;
                     string location = parts[1];
-                    
-                    // Find end time by looking at next segment's start time
-                    int endTime = 2600; // Default to end of day
+
                     scheduleSlots.Add(new ScheduleSlot(startTime, endTime, location));
                 }
 

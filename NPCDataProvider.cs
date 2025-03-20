@@ -49,7 +49,7 @@ namespace BirthdayReminderMod
                 { "Wizard", new NPCInfo("Wizard", "winter", 17, new List<string> { "155", "422", "769", "768", "Book_Mystery" })},
                 { "Evelyn", new NPCInfo("Evelyn", "winter", 20, new List<string> { "72", "220", "239", "284", "591", "595", "Raisins" })},
                 { "Leah", new NPCInfo("Leah", "winter", 23, new List<string> { "196", "200", "348", "606", "651", "426", "430" })},
-                { "Clint", new NPCInfo("Clint", "winter", 26, new List<string> { "60", "62", "64", "66", "68", "70", "336", "337", "605", "649", "749" }) }
+                { "Clint", new NPCInfo("Clint", "winter", 26, new List<string> { "60", "62", "64", "66", "68", "70", "336", "337", "605", "649", "749" })},
             };
         }
     }
