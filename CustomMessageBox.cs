@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using StardewValley.GameData.Objects;
 using System.Linq;
+using System.Text;
 
 namespace BirthdayReminderMod
 {
@@ -132,14 +133,14 @@ namespace BirthdayReminderMod
 
         private (string Location, string FromTime, string UntilTime) GetCurrentLocation(NPC npc)
         {
-            if (npc == null)
-            {
-                monitor.Log("NPC is null. Cannot determine location.", LogLevel.Error);
-                return ("Unknown Location", null, null);
-            }
+            if (npc == null) return ("Unknown", null, null);
 
-            try
+            // Check if schedule file exists
+            string schedulePath = $"Characters\\schedules\\{npc.Name}";
+            if (!Game1.content.DoesAssetExist<Dictionary<string, string>>(schedulePath))
             {
+                return GetFallbackLocationForNPC(npc); // New method (Step 2)
+            }
                 // Load NPC schedule from game files
                 Dictionary<string, string> scheduleData = Game1.content.Load<Dictionary<string, string>>($"Characters\\schedules\\{npc.Name}");
 
@@ -192,29 +193,106 @@ namespace BirthdayReminderMod
                     if (scheduleKey == Game1.currentSeason && scheduleData.ContainsKey("spring"))
                     {
                         scheduleKey = "spring";
-                        monitor.Log($"Using spring schedule as fallback for {npc.Name}", LogLevel.Debug);
                     }
                     else
                     {
-                        monitor.Log($"No schedule found for {npc.Name} with key {scheduleKey}", LogLevel.Warn);
                         return ("Unknown Location", null, null);
                     }
                 }
 
                 // Parse schedule script
-                string scheduleScript = scheduleData[scheduleKey];
+                // Parse schedule script with game's logic
+                string scheduleScript = scheduleData[scheduleKey].Trim();
                 List<ScheduleSlot> scheduleSlots = new List<ScheduleSlot>();
-                string[] segments = scheduleScript.Split('/');
-                for (int i = 0; i < segments.Length; i++)
+
+                // Handle "GOTO" directives (e.g., "winter: GOTO fall")
+                if (scheduleScript.StartsWith("GOTO ", StringComparison.OrdinalIgnoreCase))
                 {
-                    string[] parts = segments[i].Split(' ');
-                    if (parts.Length < 4) continue;
+                    string gotoKey = scheduleScript.Substring(5).Trim();
+                    if (scheduleData.TryGetValue(gotoKey, out string gotoScript))
+                    {
+                        scheduleScript = gotoScript;
+                    }
+                }
 
-                    int startTime = int.Parse(parts[0]);
-                    int endTime = i < segments.Length - 1 ? int.Parse(segments[i + 1].Split(' ')[0]) : 2600;
-                    string location = parts[1];
+                // Split segments while preserving quoted strings
+                List<string> segments = new List<string>();
+                StringBuilder currentSegment = new StringBuilder();
+                bool inQuotes = false;
 
-                    scheduleSlots.Add(new ScheduleSlot(startTime, endTime, location));
+                foreach (char c in scheduleScript)
+                {
+                    if (c == '"') inQuotes = !inQuotes;
+                    
+                    if (c == '/' && !inQuotes)
+                    {
+                        segments.Add(currentSegment.ToString().Trim());
+                        currentSegment.Clear();
+                    }
+                    else
+                    {
+                        currentSegment.Append(c);
+                    }
+                }
+                segments.Add(currentSegment.ToString().Trim());
+
+                // Parse each segment
+                foreach (string segment in segments)
+                {
+                    if (string.IsNullOrWhiteSpace(segment)) continue;
+
+                    // Split into parts while preserving quoted text
+                    List<string> parts = new List<string>();
+                    StringBuilder currentPart = new StringBuilder();
+                    bool inPartQuotes = false;
+
+                    foreach (char c in segment.Trim())
+                    {
+                        if (c == '"')
+                        {
+                            inPartQuotes = !inPartQuotes;
+                            continue;
+                        }
+
+                        if (c == ' ' && !inPartQuotes)
+                        {
+                            if (currentPart.Length > 0)
+                            {
+                                parts.Add(currentPart.ToString());
+                                currentPart.Clear();
+                            }
+                        }
+                        else
+                        {
+                            currentPart.Append(c);
+                        }
+                    }
+                    if (currentPart.Length > 0)
+                    {
+                        parts.Add(currentPart.ToString());
+                    }
+
+                    // Skip conditional/invalid entries
+                    if (parts.Count < 4 || parts[0].StartsWith("NOT")) continue;
+
+                    // Parse time
+                    if (!int.TryParse(parts[0], out int startTime))
+                    {
+                        continue;
+                    }
+
+                    // Get end time from next segment or default
+                    int endTime = 2600;
+                    if (parts.Count > 3 && int.TryParse(parts[3], out int parsedEndTime))
+                    {
+                        endTime = parsedEndTime;
+                    }
+
+                    scheduleSlots.Add(new ScheduleSlot(
+                        startTime,
+                        endTime,
+                        parts[1] // Location
+                    ));
                 }
 
                 // Sort schedule slots by start time
@@ -258,12 +336,27 @@ namespace BirthdayReminderMod
 
                 // Default to "Sleeping" if no schedule is found
                 return ("Sleeping", "12:00 AM", "2:00 AM");
-            }
-            catch (Exception ex)
+        }
+
+        private (string Location, string FromTime, string UntilTime) GetFallbackLocationForNPC(NPC npc)
+        {
+            // Special cases for Dwarf/Krobus/Wizard
+            switch (npc.Name)
             {
-                monitor.Log($"Error loading schedule for {npc.Name}: {ex.Message}", LogLevel.Error);
-                return ("Error loading schedule", null, null);
+                case "Dwarf":  return ("Mines", "6:00 AM", "2:00 AM");
+                case "Krobus": return ("Sewer", "6:00 AM", "2:00 AM");
+                case "Wizard": return ("Wizard Tower", "6:00 AM", "2:00 AM");
             }
+
+            // Default: Use NPC's home location
+            GameLocation home = npc.getHome();
+            if (home != null)
+            {
+                return (home.NameOrUniqueName, "6:00 AM", "2:00 AM");
+            }
+
+            // Ultimate fallback
+            return ("Unknown Location", "?", "?");
         }
 
         private List<string> WrapTextWithBullet(string text, SpriteFont font, float maxWidth)
@@ -465,8 +558,7 @@ namespace BirthdayReminderMod
                 if (name.StartsWith("[") && name.Contains("]"))
                 {
                     string key = name.TrimStart('[').Split(']')[0].Replace("LocalizedText Strings\\", "Strings\\");
-                    try { return Game1.content.LoadString(key); }
-                    catch { monitor.Log($"Failed loading name for {key}", LogLevel.Warn); }
+                    return Game1.content.LoadString(key);
                 }
                 return name;
             }

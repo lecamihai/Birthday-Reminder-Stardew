@@ -23,7 +23,7 @@ namespace BirthdayReminderMod
                 { "Jas", new NPCInfo("Jas", "summer", 4, new List<string> { "221", "595", "604", "103" })},
                 { "Gus", new NPCInfo("Gus", "summer", 8, new List<string> { "72", "213", "635", "729", "907" })},
                 { "Maru", new NPCInfo("Maru", "summer", 10, new List<string> { "72", "197", "190", "215", "222", "243", "336", "337", "400", "787", "910", "122" })},
-                { "Alex", new NPCInfo("Alex", "summer", 13, new List<string> { "201", "212", "Book_Defense" })},
+                { "Alex", new NPCInfo("Alex", "summer", 13, new List<string> { "201", "212"})},
                 { "Sam", new NPCInfo("Sam", "summer", 17, new List<string> { "90", "206", "562", "731" })},
                 { "Demetrius", new NPCInfo("Demetrius", "summer", 19, new List<string> { "207", "232", "233", "400" })},
                 { "Dwarf", new NPCInfo("Dwarf", "summer", 22, new List<string> { "554", "60", "62", "64", "66", "68", "70", "749", "162" })},

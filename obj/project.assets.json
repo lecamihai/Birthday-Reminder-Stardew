@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Brn\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
+      "projectUniqueName": "C:\\Users\\Brn\\Mods\\Stardew\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
       "projectName": "BirthdayReminderMod",
-      "projectPath": "C:\\Users\\Brn\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
+      "projectPath": "C:\\Users\\Brn\\Mods\\Stardew\\Birthday-Reminder-Stardew\\BirthdayReminderMod.csproj",
       "packagesPath": "C:\\Users\\Brn\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Brn\\Birthday-Reminder-Stardew\\obj\\",
+      "outputPath": "C:\\Users\\Brn\\Mods\\Stardew\\Birthday-Reminder-Stardew\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Brn\\AppData\\Roaming\\NuGet\\NuGet.Config"
