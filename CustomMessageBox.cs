@@ -3,10 +3,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
-using StardewValley.GameData.Objects;
 using System.Linq;
 using System.Text;
 
@@ -35,11 +35,10 @@ namespace BirthdayReminderMod
         private NPC npc;
         private int lineHeight;
         private string currentLocation;
-        private NPCDataProvider npcDataProvider;
         private string fromTime;
         private string untilTime;
 
-        public CustomMessageBox(string message, List<string> lovedGifts, IMonitor monitor, NPC npc, NPCDataProvider npcDataProvider):base(0, 0, 0, 0, true)
+        public CustomMessageBox(string message, List<string> lovedGifts, IMonitor monitor, NPC npc):base(0, 0, 0, 0, true)
         {
             this.message = message;
             this.lovedGifts = lovedGifts;
@@ -48,7 +47,6 @@ namespace BirthdayReminderMod
             this.npcSprite = npc?.Sprite?.Texture;
             this.heartTexture = Game1.content.Load<Texture2D>("LooseSprites\\Cursors");
             this.lineHeight = (int)Game1.smallFont.MeasureString("A").Y;
-            this.npcDataProvider = npcDataProvider;
 
             // Get the current location, start time, and end time
             var (location, fromTime, untilTime) = GetCurrentLocation(npc);
@@ -510,57 +508,21 @@ namespace BirthdayReminderMod
                 string giftName = GetItemName(giftId);
                 float yPos = y + i * (lineHeight + iconSpacing);
 
-                // Attempt to retrieve the item's data
-                if (Game1.objectData.TryGetValue(giftId, out var itemData))
+                if (ItemRegistry.GetDataOrErrorItem(giftId) is ParsedItemData itemData)
                 {
-                    Texture2D spriteSheet = Game1.objectSpriteSheet; // Default to Objects_1
-                    int spriteIndex = itemData.SpriteIndex;
-
-                    // Check if the item uses Objects_2
-                    if (itemData.Texture != null && itemData.Texture.Equals("TileSheets\\Objects_2", StringComparison.OrdinalIgnoreCase))
-                    {
-                        spriteSheet = Game1.objectSpriteSheet_2;
-                    }
-
-                    Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(spriteSheet, spriteIndex, 16, 16);
+                    Texture2D spriteSheet = itemData.GetTexture();
+                    Rectangle sourceRect = itemData.GetSourceRect();
                     b.Draw(spriteSheet, new Vector2(startX, yPos), sourceRect, Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0.86f);
-                    b.DrawString(Game1.smallFont, giftName, new Vector2(startX + iconSize + iconSpacing, yPos), Color.Black);
-                }
-                else
-                {
-                    // Fallback for items not found in objectData (e.g., vanilla items by ID)
-                    int itemId = GetItemId(giftId);
-                    if (itemId != -1)
-                    {
-                        // Check if itemId is beyond the first sheet's capacity (assuming 4096 tiles per sheet)
-                        Texture2D spriteSheet = itemId >= 4096 ? Game1.objectSpriteSheet_2 : Game1.objectSpriteSheet;
-                        int adjustedItemId = itemId % 4096; // Adjust index for the current sheet
-
-                        Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(spriteSheet, adjustedItemId, 16, 16);
-                        b.Draw(spriteSheet, new Vector2(startX, yPos), sourceRect, Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0.86f);
-                        b.DrawString(Game1.smallFont, giftName, new Vector2(startX + iconSize + iconSpacing, yPos), Color.Black);
-                    }
-                    else
-                    {
-                        b.DrawString(Game1.smallFont, giftName, new Vector2(startX, yPos), Color.Black);
-                    }
+                    b.DrawString(Game1.smallFont, itemData.DisplayName, new Vector2(startX + iconSize + iconSpacing, yPos), Color.Black);
                 }
             }
         }
 
-        private int GetItemId(string itemId) => int.TryParse(itemId, out int id) ? id : -1;
-
         private string GetItemName(string itemId)
         {
-            if (Game1.objectData.TryGetValue(itemId, out ObjectData data))
+            if (ItemRegistry.GetDataOrErrorItem(itemId) is ParsedItemData data)
             {
-                string name = data.DisplayName;
-                if (name.StartsWith("[") && name.Contains("]"))
-                {
-                    string key = name.TrimStart('[').Split(']')[0].Replace("LocalizedText Strings\\", "Strings\\");
-                    return Game1.content.LoadString(key);
-                }
-                return name;
+                return data.DisplayName;
             }
             return "Unknown Item";
         }
