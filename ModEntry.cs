@@ -1,24 +1,22 @@
 ﻿//ModEntry.cs
+using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using System;
-using Microsoft.Xna.Framework;
 using StardewValley.Menus;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BirthdayReminderMod
 {
     public class ModEntry : Mod
     {
-        private NPCDataProvider npcDataProvider;
         private List<NPC> birthdayNPCs = new List<NPC>();
         private ClickableTextureComponent birthdayButton;
         private bool buttonVisible;
 
         public override void Entry(IModHelper helper)
         {
-            npcDataProvider = new NPCDataProvider();
             helper.Events.GameLoop.DayStarted += OnDayStarted;
             helper.Events.Display.RenderedHud += OnRenderedHud;
             helper.Events.Input.ButtonPressed += OnButtonPressed;
@@ -41,14 +39,12 @@ namespace BirthdayReminderMod
             string currentSeason = Game1.currentSeason;
             int currentDay = Game1.dayOfMonth;
 
-            foreach (var npcInfo in npcDataProvider.GetNPCData().Values)
+            Utility.ForEachVillager(npc =>
             {
-                if (npcInfo.Season.Equals(currentSeason, StringComparison.OrdinalIgnoreCase) && npcInfo.Day == currentDay)
-                {
-                    if (Game1.getCharacterFromName(npcInfo.Name) is NPC npc)
-                        birthdayNPCs.Add(npc);
-                }
-            }
+                if (npc.isBirthday() && npc.CanReceiveGifts())
+                    this.birthdayNPCs.Add(npc);
+                return true;
+            });
             buttonVisible = birthdayNPCs.Count > 0;
         }
 
@@ -78,7 +74,7 @@ namespace BirthdayReminderMod
             if (birthdayButton.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
             {
                 NPC npc = birthdayNPCs[0];
-                var npcInfo = npcDataProvider.GetNPCData()[npc.Name];
+                var npcInfo = npc.GetData();
                 IClickableMenu.drawHoverText(Game1.spriteBatch,  $"It's {npc.Name}'s birthday!", Game1.smallFont);
             }
         }
@@ -103,13 +99,13 @@ namespace BirthdayReminderMod
                 else
                 {
                     NPC npc = birthdayNPCs[0];
-                    var npcInfo = npcDataProvider.GetNPCData()[npc.Name];
+                    var npcInfo = npc.GetData();
+                    var lovedGifts = Game1.NPCGiftTastes[npc.Name].Split('/')[NPC.gift_taste_love + 1].Split(' ');
                     Game1.activeClickableMenu = new CustomMessageBox(
                         $"It's {npc.Name}'s birthday!\nThey love:",
-                        npcInfo.LovedGifts,
+                        lovedGifts.ToList(),
                         Monitor,
-                        npc,
-                        npcDataProvider
+                        npc
                     );
                     Game1.playSound("bigSelect");
                     this.Helper.Input.Suppress(e.Button);
